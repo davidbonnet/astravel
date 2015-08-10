@@ -1,0 +1,5 @@
+/node_modules
+/dist/astravel.js
+/dist/astravel.debug.js
+/test
+/src

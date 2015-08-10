@@ -1,7 +1,7 @@
 {
   "name": "astravel",
   "version": "0.0.0",
-  "description": "ESTree-compliant AST walker and modifier",
+  "description": "ESTree-compliant AST walker and modifier.",
   "main": "./dist/astravel.min.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/index.js",
