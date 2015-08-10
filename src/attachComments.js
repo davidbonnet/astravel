@@ -30,39 +30,37 @@ function attachComments( parent, children, findHeadingComments, state, traveller
 			}
 			// Attach comments to children
 			for ( let i = 0, { length } = children; comment != null && i < length; i++ ) {
-				let statement = children[ i ]
+				let child = children[ i ]
 				let boundComments = []
-				while ( comment != null && comment.end < statement.start ) {
+				while ( comment != null && comment.end < child.start ) {
 					boundComments.push( comment )
 					comment = comments[ ++index ]
 				}
+				// Check if next comment is line comment and on the same line
 				if ( comment != null && comment.type[ 0 ] === 'L' ) {
-					// Check if next comment is line comment and on the same line
-					if ( comment.loc.start.line === statement.loc.end.line ) {
+					if ( comment.loc.start.line === child.loc.end.line ) {
 						boundComments.push( comment )
 						comment = comments[ ++index ]
 					}
 				}
 				if ( boundComments.length !== 0 )
-					statement.comments = boundComments
-				// Travel through statement
+					child.comments = boundComments
+				// Travel through child
 				state.index = index
-				traveller[ statement.type ]( statement, state )
-				;( { index } = state )
+				// console.log( 'comment', comment )
+				traveller[ child.type ]( child, state )
+				index = state.index
 				comment = comments[ index ]
 			}
 			// Look for remaining comments
-			index = state.index
-			comment = comments[ index ]
 			let trailingComments = []
 			while ( comment != null && comment.end < parent.end ) {
 				trailingComments.push( comment )
 				comment = comments[ ++index ]
 			}
-			if ( trailingComments.length !== 0 ) {
+			if ( trailingComments.length !== 0 )
 				parent.trailingComments = trailingComments
-				state.index = index
-			}
+			state.index = index
 		}
 	}
 }
