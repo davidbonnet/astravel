@@ -50,7 +50,7 @@ The `astravel` module consists of three elements described hereafter.
 The `defaultTraveller` travels through all child nodes of a given `node` by recursively calling `defaultTraveller.go(node, state)`. The `defaultTraveller` also contains method handlers for each node type, such as `defaultTraveller.Identifier(node, state)`, that are called by its `go` method. This provides enough flexibility to easily build a custom traveller with its `makeCustom(properties)` method, or the `astravel.makeCustomTraveller(properties)` function.
 
 
-#### astravel.makeCustomTraveller(properties)
+#### astravel.makeCustomTraveller(properties) ➞ traveller
 
 This functions returns a traveller that inherits from the `defaultTraveller` with its own provided `properties`. These properties should redefine the traveller's behavior by defining the `go(node, state)` method and/or any node handler.
 
@@ -61,7 +61,7 @@ var customTraveler = astravel.makeCustomTraveller({
    go: function(node, state) {
       // Code before entering the node
       console.log('Entering ' + node.type);
-      // Make sure this instruction remains
+      // Make sure this instruction remains somehow
       this[node.type](node, state);
       // Code after leaving the node
       console.log('Leaving ' + node.type);
@@ -69,7 +69,7 @@ var customTraveler = astravel.makeCustomTraveller({
 });
 ```
 
-To skip certain node types, the most effective way is to replace the corresponding node handlers with a function that does nothing:
+To skip specific node types, the most effective way is to replace the corresponding node handlers with a function that does nothing:
 
 ```javascript
 var ignore = Function.prototype;
@@ -80,9 +80,9 @@ var customTraveler = astravel.makeCustomTraveller({
 ```
 
 
-#### astravel.attachComments(ast, comments)
+#### astravel.attachComments(ast, comments) ➞ ast
 
-This functions attaches a list of `comments` to the corresponding nodes of a provided `ast`. Each comment is an object containing the following properties:
+This function attaches a list of `comments` to the corresponding nodes of a provided `ast` and returns that same `ast`. Each comment should be an object with the following properties:
 
 - `type`: `"Line"` or `"Block"`
 - `value`: `"Comment text value"`
@@ -90,7 +90,22 @@ This functions attaches a list of `comments` to the corresponding nodes of a pro
 - `end`: Comment ending character offset
 - `loc`: Location object with `start` and `end` properties containing one-based `line` number and zero-based `column` number properties.
 
-*TODO: Describe the simple node <--> comment association algorithm. Provide examples if Acorn.*
+This example shows of to obtain a proper list of `comments` of a given source `code` with [Acorn](https://github.com/marijnh/acorn) and how to attach them on the generated `ast`:
+
+```javascript
+var comments = [];
+var ast = acorn.parse(code, {
+   // This ensures that the `loc` property is present on comment objects
+   locations: true,
+   // Acorn will store the comment objects in this array
+   onComment: comments
+});
+// Attach comments on the ast
+astravel.attachComments(ast, comments);
+```
+
+
+*TODO: Describe the simple node <--> comment association algorithm.*
 
 
 
