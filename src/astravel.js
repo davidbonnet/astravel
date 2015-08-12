@@ -24,5 +24,13 @@ function makeCustomTraveller( places ) {
 }
 
 
-export { defaultTraveller, attachComments, makeCustomTraveller }
+class Found {
+	constructor( node, state ) {
+		this.node = node
+		this.state = state
+	}
+}
+
+
+export { defaultTraveller, attachComments, makeCustomTraveller, Found }
 

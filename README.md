@@ -85,7 +85,7 @@ var customTraveller = astravel.makeCustomTraveller({
 ```
 
 
-### astravel.Found(node, state)
+#### astravel.Found(node, state)
 
 When looking for a specific item, once you found it, you might want to end the traveller's journey immediately and not have him go through the rest of the entire AST. The most effective way is to throw an exception with an instance of `Found`.
 
@@ -193,4 +193,4 @@ npm test
 ## TODO
 
 - Provide a set of examples
-- Show how modify an AST
+- Show how to modify an AST
