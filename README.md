@@ -52,7 +52,7 @@ The `defaultTraveller` travels through all child nodes of a given `node` by recu
 
 #### astravel.makeCustomTraveller(properties) ➞ traveller
 
-This functions returns a traveller that inherits from the `defaultTraveller` with its own provided `properties`. These properties should redefine the traveller's behavior by defining the `go(node, state)` method and/or any node handler.
+This function returns a traveller that inherits from the `defaultTraveller` with its own provided `properties`. These properties should redefine the traveller's behavior by defining the `go(node, state)` method and/or any node handler.
 
 When redefining the `go` method, make sure its basic functionality is kept, which consists of calling the corresponding node handler:
 
@@ -82,15 +82,17 @@ var customTraveler = astravel.makeCustomTraveller({
 
 #### astravel.attachComments(ast, comments) ➞ ast
 
-This function attaches a list of `comments` to the corresponding nodes of a provided `ast` and returns that same `ast`. Each comment should be an object with the following properties:
+This function attaches a list of `comments` to the corresponding nodes of a provided `ast` and returns that same `ast`. The `ast` is modified in-place and only the nodes getting comments are augmented with a `comments` and/or a `trailingComments` array property.
+
+Each comment should be an object with the following properties:
 
 - `type`: `"Line"` or `"Block"`
-- `value`: `"Comment text value"`
-- `start`: Comment starting character offset
-- `end`: Comment ending character offset
+- `value`: Comment string value
+- `start`: Comment starting character offset number
+- `end`: Comment ending character offset number
 - `loc`: Location object with `start` and `end` properties containing one-based `line` number and zero-based `column` number properties.
 
-This example shows of to obtain a proper list of `comments` of a given source `code` with [Acorn](https://github.com/marijnh/acorn) and how to attach them on the generated `ast`:
+This example shows how to obtain a proper list of `comments` of a given source `code` with [Acorn](https://github.com/marijnh/acorn) and how to attach them on the generated `ast`:
 
 ```javascript
 var comments = [];
@@ -104,8 +106,33 @@ var ast = acorn.parse(code, {
 astravel.attachComments(ast, comments);
 ```
 
+The algorithm assumes that comments are not put in exotic places, such as in-between function arguments, and proceeds as follows:
 
-*TODO: Describe the simple node <--> comment association algorithm.*
+- For a given statement, it attaches all comments right above it and on it's right side.
+- If a comment block is at the beginning of a code block, it is attached to that code block.
+- Comments not followed by any statement in a code block are attached as `trailingComments` to that code block.
+
+In this example, the comments tell to which statement they are attached:
+
+```javascript
+// Attached to the variable declaration just below
+var point = {
+   // This comment is attached to the property definition just below
+   x: 0,
+   y: 0 // This comment is attached to the property definition on its left
+};
+/*
+This comment block is attached to the function declaration just below.
+*/
+function add(a, b) {
+   /*
+   This secondary comment block is attached to the function body.
+   */
+   return a + b; // This comment is attached to the return statement on its left
+   // This trailing comment is attached as such to the function body
+}
+// This trailing comment is attached as such to the program body
+```
 
 
 
