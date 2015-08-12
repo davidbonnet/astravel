@@ -42,7 +42,7 @@ The path to the module file is `dist/astravel.min.js` and can be linked to from 
 
 ## Usage
 
-The `astravel` module consists the following items described hereafter.
+The `astravel` module consists of the following items described hereafter.
 
 
 #### astravel.defaultTraveller
