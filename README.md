@@ -42,8 +42,55 @@ The path to the module file is `dist/astravel.min.js` and can be linked to from 
 
 ## Usage
 
-__TODO__
+The `astravel` module consists of three elements described hereafter.
 
+
+#### astravel.defaultTraveller
+
+The `defaultTraveller` travels through all child nodes of a given `node` by recursively calling `defaultTraveller.go(node, state)`. The `defaultTraveller` also contains method handlers for each node type, such as `defaultTraveller.Identifier(node, state)`, that are called by its `go` method. This provides enough flexibility to easily build a custom traveller with its `makeCustom(properties)` method, or the `astravel.makeCustomTraveller(properties)` function.
+
+
+#### astravel.makeCustomTraveller(properties)
+
+This functions returns a traveller that inherits from the `defaultTraveller` with its own provided `properties`. These properties should redefine the traveller's behavior by defining the `go(node, state)` method and/or any node handler.
+
+When redefining the `go` method, make sure its basic functionality is kept, which consists of calling the corresponding node handler:
+
+```javascript
+var customTraveler = astravel.makeCustomTraveller({
+   go: function(node, state) {
+      // Code before entering the node
+      console.log('Entering ' + node.type);
+      // Make sure this instruction remains
+      this[node.type](node, state);
+      // Code after leaving the node
+      console.log('Leaving ' + node.type);
+   }
+});
+```
+
+To skip certain node types, the most effective way is to replace the corresponding node handlers with a function that does nothing:
+
+```javascript
+var ignore = Function.prototype;
+var customTraveler = astravel.makeCustomTraveller({
+   FunctionDeclaration: ignore,
+   FunctionExpression: ignore
+});
+```
+
+
+#### astravel.attachComments(ast, comments)
+
+This functions attaches a list of `comments` to the corresponding nodes of a provided `ast`. Each comment is an object containing the following properties:
+
+- `type`: `"Line"` or `"Block"`
+- `value`: `"Comment text value"`
+- `start`: Comment starting character offset
+- `end`: Comment ending character offset
+- `loc`: Location object with `start` and `end` properties containing one-based `line` number and zero-based `column` number properties.
+
+***TODO: Describe the simple node <--> comment association algorithm.***
 
 
 
@@ -76,7 +123,3 @@ While making changes to Astravel, make sure it passes the tests by running:
 ```bash
 npm test
 ```
-
-
-
-## TODO

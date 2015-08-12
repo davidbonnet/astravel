@@ -9,13 +9,13 @@ const ignore = Function.prototype
 export default {
 	go: function( node, state ) {
 		/*
-		Starts travelling through the specified `node` with the provided `state`.
+		Starts travelling through the specified AST `node` with the provided `state`.
 		*/
 		this[ node.type ]( node, state )
 	},
 	makeCustom: function ( places ) {
 		/*
-		Returns a custom node traveller object based on this one.
+		Returns a custom AST traveller object based on this one.
 		*/
 		let customTraveller = Object.create( this )
 		for ( let key in places )
@@ -302,4 +302,3 @@ export default {
 }
 
 // TODO: Add JS7 nodes
-

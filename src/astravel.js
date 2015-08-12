@@ -9,7 +9,7 @@
 // https://github.com/davidbonnet/astravel/issues
 
 
-import traveller from "./traveller"
+import defaultTraveller from "./defaultTraveller"
 import attachComments from "./attachComments"
 
 
@@ -17,12 +17,12 @@ function makeCustomTraveller( places ) {
 	/*
 	Returns a custom AST traveller object based on the default traveller.
 	*/
-	let customTraveller = Object.create( traveller )
+	let customTraveller = Object.create( defaultTraveller )
 	for ( let key in places )
 		customTraveller[ key ] = places[ key ]
 	return customTraveller
 }
 
 
-export { traveller as defaultTraveller, attachComments, makeCustomTraveller }
+export { defaultTraveller, attachComments, makeCustomTraveller }
 
