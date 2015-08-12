@@ -42,12 +42,17 @@ The path to the module file is `dist/astravel.min.js` and can be linked to from 
 
 ## Usage
 
-The `astravel` module consists of three elements described hereafter.
+The `astravel` module consists the following itmes described hereafter.
 
 
 #### astravel.defaultTraveller
 
-The `defaultTraveller` travels through all child nodes of a given `node` by recursively calling `defaultTraveller.go(node, state)`. The `defaultTraveller` also contains method handlers for each node type, such as `defaultTraveller.Identifier(node, state)`, that are called by its `go` method. This provides enough flexibility to easily build a custom traveller with its `makeCustom(properties)` method, or the `astravel.makeCustomTraveller(properties)` function.
+This object contains the following methods:
+
+- `go(node, state)`: Travels through the provided `node` with a given `state` (an object that can be of any type) by recursively calling this method.
+- `find(node, state)`: Travels through the provided AST `node` with a given `state`. If it catches a `Found` instance, returns it. Otherwise, returns nothing.
+- `[NodeType](node, state)`: Method handler for a specific `NodeType`.
+- `makeCustom(properties)`: Returns a traveller that inherits from the `defaultTraveller` with its own provided `properties` and the property `super` that points to the parent traveller object.
 
 
 #### astravel.makeCustomTraveller(properties) ➞ traveller
@@ -61,8 +66,8 @@ var customTraveler = astravel.makeCustomTraveller({
    go: function(node, state) {
       // Code before entering the node
       console.log('Entering ' + node.type);
-      // Make sure this instruction remains somehow
-      this[node.type](node, state);
+      // Make sure to call the parent's `go` method to keep traveling through the AST
+      this.super.go(node, state);
       // Code after leaving the node
       console.log('Leaving ' + node.type);
    }
@@ -73,10 +78,27 @@ To skip specific node types, the most effective way is to replace the correspond
 
 ```javascript
 var ignore = Function.prototype;
-var customTraveler = astravel.makeCustomTraveller({
+var customTraveller = astravel.makeCustomTraveller({
    FunctionDeclaration: ignore,
    FunctionExpression: ignore
 });
+```
+
+
+### astravel.Found(node, state)
+
+When looking for a specific item, once you found it, you might want to end the traveller's journey immediately and not have him go through the rest of the entire AST. The most effective way is to throw an exception with an instance of `Found`.
+
+```javascript
+var customTraveller = astravel.makeCustomTraveller({
+   FunctionDeclaration: function(node, state) {
+      // Found first function declaration
+      throw new astravel.Found(node, state);
+   }
+});
+// Get the first function declaration, if any
+var found = customTraveller.find(node);
+if (found) console.log('Found function named ' + node.id.name)
 ```
 
 
@@ -165,3 +187,10 @@ While making changes to Astravel, make sure it passes the tests by running:
 ```bash
 npm test
 ```
+
+
+
+## TODO
+
+- Provide a set of examples
+- Show how modify an AST

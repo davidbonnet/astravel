@@ -26,7 +26,7 @@ function attachComments( parent, children, findHeadingComments, state, traveller
 					comment = comments[ ++index ]
 				}
 				if ( boundComments.length !== 0 && parent.comments == null )
-					parent.comments = boundComments				
+					parent.comments = boundComments
 			}
 			// Attach comments to children
 			for ( let i = 0, { length } = children; comment != null && i < length; i++ ) {
@@ -66,7 +66,7 @@ function attachComments( parent, children, findHeadingComments, state, traveller
 }
 
 
-var Program
+let Program
 
 
 let customTraveller = defaultTraveller.makeCustom( {
@@ -89,7 +89,7 @@ let customTraveller = defaultTraveller.makeCustom( {
 
 export default function( node, comments ) {
 	/*
-	Attaches the provided `comments` list to the `node`-rooted ast.
+	Modifies in-place the AST starting at `node` by attaching the provided `comments` and returns that AST.
 	*/
 	customTraveller[ node.type ]( node, {
 		comments,
@@ -97,4 +97,3 @@ export default function( node, comments ) {
 	} )
 	return node
 }
-

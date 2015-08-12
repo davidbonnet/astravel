@@ -7,19 +7,37 @@ const ignore = Function.prototype
 
 
 export default {
+
+	// Basic methods
 	go: function( node, state ) {
 		/*
 		Starts travelling through the specified AST `node` with the provided `state`.
 		*/
 		this[ node.type ]( node, state )
 	},
-	makeCustom: function ( places ) {
+	find: function(node, state) {
+		/*
+		Starts travelling through the specified AST `node` with the provided `state`.
+		If it catches a `Found` instance, returns it. Otherwise, returns `undefined`.
+		*/
+      try {
+         this.go(node, state);
+      } catch (error) {
+         if (error instanceof astravel.Found) {
+            return error;
+         } else {
+            throw error;
+         }
+      }
+   },
+	makeCustom: function ( properties ) {
 		/*
 		Returns a custom AST traveller object based on this one.
 		*/
 		let customTraveller = Object.create( this )
-		for ( let key in places )
-			customTraveller[ key ] = places[ key ]
+		customTraveller.super = this
+		for ( let key in properties )
+			customTraveller[ key ] = properties[ key ]
 		return customTraveller
 	},
 
@@ -154,15 +172,15 @@ export default {
 		}
 	},
 	ObjectExpression: function( node, state ) {
-		for ( let i = 0, { properties } = node, { length } = properties; i < length; i++ ) {
-			let property = properties[ i ]
-			this.go( property.key, state )
-			if ( !property.shorthand ) {
-				this.go( property.value, state )
-			}
-		}
+		const { properties } = node, { length } = properties
+		for ( let i = 0; i < length; i++ )
+			this.go( properties[ i ], state )
 	},
-	Property: ignore,
+	Property: function( node, state ) {
+		this.go( node.key )
+		if ( !node.shorthand )
+			this.go( node.value )
+	},
 	FunctionExpression: FunctionDeclaration,
 	SequenceExpression: function( node, state ) {
 		const { expressions } = node
@@ -197,10 +215,8 @@ export default {
 	CallExpression: function( node, state ) {
 		this.go( node.callee, state )
 		const args = node[ 'arguments' ]
-		for ( let i = 0, { length } = args; i < length; i++ ) {
-			let arg = args[ i ]
-			this.go( arg, state )
-		}
+		for ( let i = 0, { length } = args; i < length; i++ )
+			this.go( args[ i ], state )
 	},
 	MemberExpression: function( node, state ) {
 		this.go( node.object, state )
@@ -220,13 +236,13 @@ export default {
 	},
 	ImportDeclaration: function( node, state ) {
 		const { specifiers } = node, { length } = specifiers
-		if ( length > 0 ) {
-			let i = 0, specifier = null
-			for ( let i = 0; i < length; i++ ) {
-				let specifier = specifiers[ i ]
-			}
-		}
+		if ( length > 0 )
+			for ( let i = 0; i < length; i++ )
+				this.go( specifiers[ i ], state )
 	},
+	ImportNamespaceSpecifier: ignore,
+	ImportDefaultSpecifier: ignore,
+	ImportSpecifier: ignore,
 	ExportDefaultDeclaration: function( node, state ) {
 		this.go( node.declaration, state )
 	},
@@ -234,27 +250,19 @@ export default {
 		if ( node.declaration ) {
 			this.go( node.declaration, state )
 		} else {
-			const { specifiers } = node
-			const { length } = specifiers
-			if ( length > 0 ) {
-				for ( let i = 0; i < length; i++ ) {
-					let specifier = specifiers[i]
-					let { name } = specifier.local
-					if ( name !== specifier.exported.name )
-						specifier.exported.name
-				}
-			}
+			const { specifiers } = node, { length } = specifiers
+			for ( let i = 0; i < length; i++ )
+				this.go( specifiers[ i ], state )
 		}
 	},
+	ExportSpecifier: ignore,
 	ExportAllDeclaration: ignore,
 	MethodDefinition: function( node, state ) {
 		this.go( node.key, state )
 		const { params } = node.value
 		if ( params ) {
-			for ( let i = 0, { length } = params; i < length; i++ ) {
-				let param = params[ i ]
-				this.go( param, state )
-			}
+			for ( let i = 0, { length } = params; i < length; i++ )
+				this.go( params[ i ], state )
 		}
 		this.go( node.value.body, state )
 	},
@@ -272,33 +280,24 @@ export default {
 	},
 	TemplateLiteral: function( node, state ) {
 		const { quasis, expressions } = node
-		for ( let i = 0, { length } = expressions; i < length; i++ ) {
-			let expression = expressions[ i ]
-			this.go( expression, state )
-		}
+		for ( let i = 0, { length } = expressions; i < length; i++ )
+			this.go( expressions[ i ], state )
 	},
 	TaggedTemplateExpression: function( node, state ) {
 		this.go( node.tag, state )
 		this.go( node.quasi, state )
 	},
 	ObjectPattern: function( node, state ) {
-		for ( let i = 0, { properties } = node, { length } = properties; i < length; i++ ) {
-			let property = properties[ i ]
-			if ( property.computed ) {
-				this.go( property.key, state )
-			} else {
-				this.go( property.key, state )
-			}
-			if ( !property.shorthand ) {
-				this.go( property.value, state )
-			}
-		}
+		const { properties } = node, { length } = properties
+		for ( let i = 0; i < length; i++ )
+			this.go( properties[ i ], state )
 	},
 	ArrayPattern: ArrayExpression,
 	AssignmentPattern: function( node, state ) {
 		this.go( node.left, state )
 		this.go( node.right, state )
 	}
+
 }
 
 // TODO: Add JS7 nodes
