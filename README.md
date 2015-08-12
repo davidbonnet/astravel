@@ -90,7 +90,7 @@ This functions attaches a list of `comments` to the corresponding nodes of a pro
 - `end`: Comment ending character offset
 - `loc`: Location object with `start` and `end` properties containing one-based `line` number and zero-based `column` number properties.
 
-***TODO: Describe the simple node <--> comment association algorithm.***
+*TODO: Describe the simple node <--> comment association algorithm. Provide examples if Acorn.*
 
 
 

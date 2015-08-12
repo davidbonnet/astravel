@@ -1,6 +1,6 @@
 
 
-import traveller from "./traveller"
+import defaultTraveller from "./defaultTraveller"
 
 
 function attachComments( parent, children, findHeadingComments, state, traveller ) {
@@ -69,7 +69,7 @@ function attachComments( parent, children, findHeadingComments, state, traveller
 var Program
 
 
-let customTraveller = traveller.makeCustom( {
+let customTraveller = defaultTraveller.makeCustom( {
 	Program: Program = function( node, state ) {
 		attachComments( node, node.body, true, state, this )
 	},
