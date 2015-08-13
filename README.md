@@ -57,16 +57,16 @@ This object contains the following methods:
 
 #### astravel.makeCustomTraveller(properties) ➞ traveller
 
-This function returns a traveller that inherits from the `defaultTraveller` with its own provided `properties`. These properties should redefine the traveller's behavior by defining the `go(node, state)` method and/or any node handler.
+This function is similar to `astravel.defaultTraveller.makeCustom`: it returns a traveller that inherits from the `defaultTraveller` with its own provided `properties` and the property `super` that points to the `defaultTraveller` object. These properties should redefine the traveller's behavior by defining the `go(node, state)` method and/or any node handler.
 
-When redefining the `go` method, make sure its basic functionality is kept, which consists of calling the corresponding node handler:
+When redefining the `go` method, make sure its basic functionality is kept by calling the parent's `go` method to keep traveling through the AST:
 
 ```javascript
 var customTraveler = astravel.makeCustomTraveller({
    go: function(node, state) {
       // Code before entering the node
       console.log('Entering ' + node.type);
-      // Make sure to call the parent's `go` method to keep traveling through the AST
+      // Call the parent's `go` method
       this.super.go(node, state);
       // Code after leaving the node
       console.log('Leaving ' + node.type);
@@ -87,18 +87,20 @@ var customTraveller = astravel.makeCustomTraveller({
 
 #### astravel.Found(node, state)
 
-When looking for a specific item, once you found it, you might want to end the traveller's journey immediately and not have him go through the rest of the entire AST. The most effective way is to throw an exception with an instance of `Found`.
+You might want to end the traveller's journey immediately after he found something you're looking for instead of letting him go through the rest of the entire AST. The most effective way is to throw an exception with an instance of `Found`, that gets catched and returned by the traveller's `find` method.
+
+This example shows how to look for the first function declaration:
 
 ```javascript
 var customTraveller = astravel.makeCustomTraveller({
    FunctionDeclaration: function(node, state) {
-      // Found first function declaration
+      // Found first function declaration, end travel
       throw new astravel.Found(node, state);
    }
 });
 // Get the first function declaration, if any
 var found = customTraveller.find(node);
-if (found) console.log('Found function named ' + node.id.name)
+if (found) console.log('Found function named ' + found.node.id.name)
 ```
 
 
@@ -130,7 +132,7 @@ astravel.attachComments(ast, comments);
 
 The algorithm assumes that comments are not put in exotic places, such as in-between function arguments, and proceeds as follows:
 
-- For a given statement, it attaches all comments right above it and on it's right side.
+- For a given statement, it attaches all comments right above it and on the same line to it's right side.
 - If a comment block is at the beginning of a code block, it is attached to that code block.
 - Comments not followed by any statement in a code block are attached as `trailingComments` to that code block.
 
