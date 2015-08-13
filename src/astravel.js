@@ -9,18 +9,18 @@
 // https://github.com/davidbonnet/astravel/issues
 
 
-import defaultTraveller from "./defaultTraveller"
+import defaultTraveler from "./defaultTraveler"
 import attachComments from "./attachComments"
 
 
-function makeCustomTraveller( places ) {
+function makeCustomTraveler( places ) {
 	/*
-	Returns a custom AST traveller object based on the default traveller.
+	Returns a custom AST traveler object based on the default traveler.
 	*/
-	let customTraveller = Object.create( defaultTraveller )
+	let customTraveler = Object.create( defaultTraveler )
 	for ( let key in places )
-		customTraveller[ key ] = places[ key ]
-	return customTraveller
+		customTraveler[ key ] = places[ key ]
+	return customTraveler
 }
 
 
@@ -32,5 +32,5 @@ class Found {
 }
 
 
-export { defaultTraveller, attachComments, makeCustomTraveller, Found }
+export { defaultTraveler, attachComments, makeCustomTraveler, Found }
 

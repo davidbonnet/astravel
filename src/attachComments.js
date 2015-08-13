@@ -1,9 +1,9 @@
 
 
-import defaultTraveller from "./defaultTraveller"
+import defaultTraveler from "./defaultTraveler"
 
 
-function attachComments( parent, children, findHeadingComments, state, traveller ) {
+function attachComments( parent, children, findHeadingComments, state, traveler ) {
 	let { index, comments } = state
 	let comment = comments[ index ]
 	if ( comment != null ) {
@@ -48,7 +48,7 @@ function attachComments( parent, children, findHeadingComments, state, traveller
 				// Travel through child
 				state.index = index
 				// console.log( 'comment', comment )
-				traveller[ child.type ]( child, state )
+				traveler[ child.type ]( child, state )
 				index = state.index
 				comment = comments[ index ]
 			}
@@ -69,7 +69,7 @@ function attachComments( parent, children, findHeadingComments, state, traveller
 let Program
 
 
-let customTraveller = defaultTraveller.makeCustom( {
+let customTraveler = defaultTraveler.makeCustom( {
 	Program: Program = function( node, state ) {
 		attachComments( node, node.body, true, state, this )
 	},
@@ -91,7 +91,7 @@ export default function( node, comments ) {
 	/*
 	Modifies in-place the AST starting at `node` by attaching the provided `comments` and returns that AST.
 	*/
-	customTraveller[ node.type ]( node, {
+	customTraveler[ node.type ]( node, {
 		comments,
 		index: 0
 	} )

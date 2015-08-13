@@ -32,13 +32,13 @@ export default {
    },
 	makeCustom: function ( properties ) {
 		/*
-		Returns a custom AST traveller object based on this one.
+		Returns a custom AST traveler object based on this one.
 		*/
-		let customTraveller = Object.create( this )
-		customTraveller.super = this
+		let customTraveler = Object.create( this )
+		customTraveler.super = this
 		for ( let key in properties )
-			customTraveller[ key ] = properties[ key ]
-		return customTraveller
+			customTraveler[ key ] = properties[ key ]
+		return customTraveler
 	},
 
 	// JavaScript 5
