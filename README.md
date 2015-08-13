@@ -42,7 +42,12 @@ The path to the module file is `dist/astravel.min.js` and can be linked to from 
 
 ## Usage
 
-The `astravel` module consists of the following items described hereafter.
+The `astravel` module consists of the following items:
+
+- [defaultTraveller](#astraveldefaulttraveller)
+- [makeCustomTraveller(properties) ➞ traveller](#astravelmakecustomtravellerproperties--traveller)
+- [Found(node, state)](#astravelfoundnode-state)
+- [attachComments(ast, comments) ➞ ast](#astravelattachcommentsast-comments--ast)
 
 
 #### astravel.defaultTraveller
@@ -100,7 +105,7 @@ var customTraveller = astravel.makeCustomTraveller({
 });
 // Get the first function declaration, if any
 var found = customTraveller.find(node);
-if (found) console.log('Found function named ' + found.node.id.name)
+if (found) console.log('Found function named ' + found.node.id.name);
 ```
 
 
