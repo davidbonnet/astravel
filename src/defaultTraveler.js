@@ -1,5 +1,8 @@
 
 
+import { Found } from "./astravel"
+
+
 var ForInStatement, FunctionDeclaration, RestElement, BinaryExpression, ArrayExpression
 
 
@@ -15,19 +18,18 @@ export default {
 		*/
 		this[ node.type ]( node, state )
 	},
-	find: function(node, state) {
+	find: function( node, state ) {
 		/*
 		Starts travelling through the specified AST `node` with the provided `state`.
 		If it catches a `Found` instance, returns it. Otherwise, returns `undefined`.
 		*/
       try {
-         this.go(node, state);
-      } catch (error) {
-         if (error instanceof astravel.Found) {
+         this.go( node, state );
+      } catch ( error ) {
+         if ( error instanceof Found )
             return error;
-         } else {
+         else
             throw error;
-         }
       }
    },
 	makeCustom: function ( properties ) {
