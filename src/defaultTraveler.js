@@ -119,7 +119,7 @@ export default {
 	},
 	ForStatement: function( node, state ) {
 		if ( node.init != null )
-			this.ForInit( node.init, state )
+			this.go( node.init, state )
 		if ( node.test != null )
 			this.go( node.test, state )
 		if ( node.update != null )
@@ -130,9 +130,6 @@ export default {
 		this.ForInit( node.left, state )
 		this.go( node.right, state )
 		this.go( node.body, state )
-	},
-	ForInit: function( node, state ) {
-		this.go( node, state )
 	},
 	DebuggerStatement: ignore,
 	FunctionDeclaration: FunctionDeclaration = function( node, state ) {
@@ -146,13 +143,13 @@ export default {
 	},
 	VariableDeclaration: function( node, state ) {
 		const { declarations } = node
-		for ( let i = 0, { length } = declarations; i < length; i++ ) {
-			let declaration = declarations[ i ]
-			this.go( declaration.id, state )
-			const { init } = declaration
-			if ( init != null )
-				this.go( init, state )
-		}
+		for ( let i = 0, { length } = declarations; i < length; i++ )
+			this.go( declarations[ i ], state )
+	},
+	VariableDeclarator: function( node, state ) {
+		this.go( node.id, state )
+		if ( node.init != null )
+			this.go( node.init, state )
 	},
 	ArrowFunctionExpression: function( node, state ) {
 		const { params } = node
@@ -200,8 +197,8 @@ export default {
 		this.go( node.right, state )
 	},
 	BinaryExpression: BinaryExpression = function( node, state ) {
-		this.go( node, state )
-		this.go( node, state )
+		this.go( node.left, state )
+		this.go( node.right, state )
 	},
 	LogicalExpression: BinaryExpression,
 	ConditionalExpression: function( node, state ) {

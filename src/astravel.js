@@ -13,13 +13,14 @@ import defaultTraveler from "./defaultTraveler"
 import attachComments from "./attachComments"
 
 
-function makeCustomTraveler( places ) {
+function makeCustomTraveler( properties ) {
 	/*
 	Returns a custom AST traveler object based on the default traveler.
 	*/
 	let customTraveler = Object.create( defaultTraveler )
-	for ( let key in places )
-		customTraveler[ key ] = places[ key ]
+	for ( let key in properties )
+		customTraveler[ key ] = properties[ key ]
+	customTraveler.super = defaultTraveler
 	return customTraveler
 }
 

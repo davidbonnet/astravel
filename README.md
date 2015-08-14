@@ -62,7 +62,7 @@ This object contains the following methods:
 
 #### astravel.makeCustomTraveler(properties) ➞ traveler
 
-This function is similar to `astravel.defaultTraveler.makeCustom`: it returns a traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the `defaultTraveler` object. These properties should redefine the traveler's behavior by defining the `go(node, state)` method and/or any node handler.
+This function is similar to `astravel.defaultTraveler.makeCustom`: it returns a traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the `defaultTraveler` object. These properties should redefine the traveler's behavior by implementing the `go(node, state)` method and/or any node handler.
 
 When redefining the `go` method, make sure its basic functionality is kept by calling the parent's `go` method to keep traveling through the AST:
 
@@ -72,7 +72,7 @@ var customTraveler = astravel.makeCustomTraveler({
       // Code before entering the node
       console.log('Entering ' + node.type);
       // Call the parent's `go` method
-      this.super.go(node, state);
+      this.super.go.call(this, node, state);
       // Code after leaving the node
       console.log('Leaving ' + node.type);
    }
@@ -85,7 +85,8 @@ To skip specific node types, the most effective way is to replace the correspond
 var ignore = Function.prototype;
 var customTraveler = astravel.makeCustomTraveler({
    FunctionDeclaration: ignore,
-   FunctionExpression: ignore
+   FunctionExpression: ignore,
+   ArrowFunctionExpression: ignore
 });
 ```
 
