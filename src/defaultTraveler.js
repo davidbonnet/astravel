@@ -12,13 +12,13 @@ const ignore = Function.prototype
 export default {
 
 	// Basic methods
-	go: function( node, state ) {
+	go( node, state ) {
 		/*
 		Starts travelling through the specified AST `node` with the provided `state`.
 		*/
 		this[ node.type ]( node, state )
 	},
-	find: function( node, state ) {
+	find( node, state ) {
 		/*
 		Starts travelling through the specified AST `node` with the provided `state`.
 		If it catches a `Found` instance, returns it. Otherwise, returns `undefined`.
@@ -32,7 +32,7 @@ export default {
             throw error;
       }
    },
-	makeCustom: function ( properties ) {
+	makeCustom( properties ) {
 		/*
 		Returns a custom AST traveler object based on this one.
 		*/
@@ -44,65 +44,65 @@ export default {
 	},
 
 	// JavaScript 5
-	Program: function( node, state ) {
+	Program( node, state ) {
 		let statements = node.body
 		for ( let i = 0, { length } = statements; i < length; i++ )
 			this.go( statements[ i ], state )
 	},
-	BlockStatement: function( node, state ) {
+	BlockStatement( node, state ) {
 		let statements = node.body
 		if ( statements != null )
 			for ( let i = 0, { length } = statements; i < length; i++ )
 				this.go( statements[ i ], state )
 	},
 	EmptyStatement: ignore,
-	ExpressionStatement: function( node, state ) {
+	ExpressionStatement( node, state ) {
 		this.go( node.expression, state )
 	},
-	IfStatement: function( node, state ) {
+	IfStatement( node, state ) {
 		this.go( node.test, state )
 		this.go( node.consequent, state )
 		if ( node.alternate != null )
 			this.go( node.alternate, state )
 	},
-	LabeledStatement: function( node, state ) {
+	LabeledStatement( node, state ) {
 		this.go( node.label, state )
 		this.go( node.body, state )
 	},
-	BreakStatement: function( node, state ) {
+	BreakStatement( node, state ) {
 		if ( node.label )
 			this.go( node.label, state )
 	},
-	ContinueStatement: function( node, state ) {
+	ContinueStatement( node, state ) {
 		if ( node.label )
 			this.go( node.label, state )
 	},
-	WithStatement: function( node, state ) {
+	WithStatement( node, state ) {
 		this.go( node.object, state )
 		this.go( node.body, state )
 	},
-	SwitchStatement: function( node, state ) {
+	SwitchStatement( node, state ) {
 		const { lineEnd, code } = state
 		this.go( node.discriminant, state )
 		const { cases } = node;
 		for ( let i = 0, { length } = cases; i < length; i++ )
 			this.go( cases[ i ], state )
 	},
-	SwitchCase: function( node, state ) {
+	SwitchCase( node, state ) {
 		if ( node.test != null )
 			this.go( node.test, state )
 		let statements = node.consequent
 		for ( let i = 0, { length } = statements; i < length; i++ )
 			this.go( statements[ i ], state )
 	},
-	ReturnStatement: function( node, state ) {
+	ReturnStatement( node, state ) {
 		if ( node.argument )
 			this.go( node.argument, state )
 	},
-	ThrowStatement: function( node, state ) {
+	ThrowStatement( node, state ) {
 		this.go( node.argument, state )
 	},
-	TryStatement: function( node, state ) {
+	TryStatement( node, state ) {
 		this.go( node.block, state )
 		if ( node.handler != null ) {
 			this.go( node.handler.param, state )
@@ -111,15 +111,15 @@ export default {
 		if ( node.finalizer != null )
 			this.go( node.finalizer, state )
 	},
-	WhileStatement: function( node, state ) {
+	WhileStatement( node, state ) {
 		this.go( node.test, state )
 		this.go( node.body, state )
 	},
-	DoWhileStatement: function( node, state ) {
+	DoWhileStatement( node, state ) {
 		this.go( node.body, state )
 		this.go( node.test, state )
 	},
-	ForStatement: function( node, state ) {
+	ForStatement( node, state ) {
 		if ( node.init != null )
 			this.go( node.init, state )
 		if ( node.test != null )
@@ -143,17 +143,17 @@ export default {
 				this.go( params[ i ], state )
 		this.go( node.body, state )
 	},
-	VariableDeclaration: function( node, state ) {
+	VariableDeclaration( node, state ) {
 		const { declarations } = node
 		for ( let i = 0, { length } = declarations; i < length; i++ )
 			this.go( declarations[ i ], state )
 	},
-	VariableDeclarator: function( node, state ) {
+	VariableDeclarator( node, state ) {
 		this.go( node.id, state )
 		if ( node.init != null )
 			this.go( node.init, state )
 	},
-	ArrowFunctionExpression: function( node, state ) {
+	ArrowFunctionExpression( node, state ) {
 		const { params } = node
 		if ( params != null && params.length !== 0 ) {
 			for ( let i = 0, { length } = params; i < length; i++ ) {
@@ -170,31 +170,31 @@ export default {
 			this.go( element, state )
 		}
 	},
-	ObjectExpression: function( node, state ) {
+	ObjectExpression( node, state ) {
 		const { properties } = node, { length } = properties
 		for ( let i = 0; i < length; i++ )
 			this.go( properties[ i ], state )
 	},
-	Property: function( node, state ) {
+	Property( node, state ) {
 		this.go( node.key )
 		if ( !node.shorthand )
 			this.go( node.value )
 	},
 	FunctionExpression: FunctionDeclaration,
-	SequenceExpression: function( node, state ) {
+	SequenceExpression( node, state ) {
 		const { expressions } = node
 		for ( let i = 0, { length } = expressions; i < length; i++ ) {
 			let expression = expressions[ i ]
 			this.go( expression, state )
 		}
 	},
-	UnaryExpression: function( node, state ) {
+	UnaryExpression( node, state ) {
 		this.go( node.argument, state )
 	},
-	UpdateExpression: function( node, state ) {
+	UpdateExpression( node, state ) {
 		this.go( node.argument, state )
 	},
-	AssignmentExpression: function( node, state ) {
+	AssignmentExpression( node, state ) {
 		this.go( node.left, state )
 		this.go( node.right, state )
 	},
@@ -203,21 +203,21 @@ export default {
 		this.go( node.right, state )
 	},
 	LogicalExpression: BinaryExpression,
-	ConditionalExpression: function( node, state ) {
+	ConditionalExpression( node, state ) {
 		this.go( node.test, state )
 		this.go( node.consequent, state )
 		this.go( node.alternate, state )
 	},
-	NewExpression: function( node, state ) {
+	NewExpression( node, state ) {
 		this.CallExpression( node, state )
 	},
-	CallExpression: function( node, state ) {
+	CallExpression( node, state ) {
 		this.go( node.callee, state )
 		const args = node[ 'arguments' ]
 		for ( let i = 0, { length } = args; i < length; i++ )
 			this.go( args[ i ], state )
 	},
-	MemberExpression: function( node, state ) {
+	MemberExpression( node, state ) {
 		this.go( node.object, state )
 		this.go( node.property, state )
 	},
@@ -226,14 +226,14 @@ export default {
 
 	// JavaScript 6
 	ForOfStatement: ForInStatement,
-	ClassDeclaration: function( node, state ) {
+	ClassDeclaration( node, state ) {
 		this.go( node.id, state )
 		if ( node.superClass )
 			this.go( node.superClass, state )
 		// ClassBody
 		this.BlockStatement( node.body, state )
 	},
-	ImportDeclaration: function( node, state ) {
+	ImportDeclaration( node, state ) {
 		const { specifiers } = node, { length } = specifiers
 		if ( length > 0 )
 			for ( let i = 0; i < length; i++ )
@@ -242,10 +242,10 @@ export default {
 	ImportNamespaceSpecifier: ignore,
 	ImportDefaultSpecifier: ignore,
 	ImportSpecifier: ignore,
-	ExportDefaultDeclaration: function( node, state ) {
+	ExportDefaultDeclaration( node, state ) {
 		this.go( node.declaration, state )
 	},
-	ExportNamedDeclaration: function( node, state ) {
+	ExportNamedDeclaration( node, state ) {
 		if ( node.declaration ) {
 			this.go( node.declaration, state )
 		} else {
@@ -256,7 +256,7 @@ export default {
 	},
 	ExportSpecifier: ignore,
 	ExportAllDeclaration: ignore,
-	MethodDefinition: function( node, state ) {
+	MethodDefinition( node, state ) {
 		this.go( node.key, state )
 		const { params } = node.value
 		if ( params ) {
@@ -265,7 +265,7 @@ export default {
 		}
 		this.go( node.value.body, state )
 	},
-	ClassExpression: function( node, state ) {
+	ClassExpression( node, state ) {
 		this.ClassDeclaration( node, state )
 	},
 	Super: ignore,
@@ -273,26 +273,26 @@ export default {
 		this.go( node.argument, state )
 	},
 	SpreadElement: RestElement,
-	YieldExpression: function( node, state ) {
+	YieldExpression( node, state ) {
 		if ( node.argument )
 			this.go( node.argument, state )
 	},
-	TemplateLiteral: function( node, state ) {
+	TemplateLiteral( node, state ) {
 		const { quasis, expressions } = node
 		for ( let i = 0, { length } = expressions; i < length; i++ )
 			this.go( expressions[ i ], state )
 	},
-	TaggedTemplateExpression: function( node, state ) {
+	TaggedTemplateExpression( node, state ) {
 		this.go( node.tag, state )
 		this.go( node.quasi, state )
 	},
-	ObjectPattern: function( node, state ) {
+	ObjectPattern( node, state ) {
 		const { properties } = node, { length } = properties
 		for ( let i = 0; i < length; i++ )
 			this.go( properties[ i ], state )
 	},
 	ArrayPattern: ArrayExpression,
-	AssignmentPattern: function( node, state ) {
+	AssignmentPattern( node, state ) {
 		this.go( node.left, state )
 		this.go( node.right, state )
 	}

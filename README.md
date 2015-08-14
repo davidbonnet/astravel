@@ -93,7 +93,7 @@ var customTraveler = astravel.makeCustomTraveler({
 
 #### astravel.Found(node, state)
 
-This class creates an instance by initializing its `node` and `state` properties to the values provided to the constructor arguments. Its purpose is to be thrown from within a traveler's node handler, or it's `go` method. The traveler's `find` method then catches that instance and returns it. This is particularly useful for searching specific nodes and preventing the traveler to unnecessarily go through the rest of the entire AST.
+This class creates an instance by initializing its `node` and `state` properties to the values provided to the constructor arguments. Its purpose is to be thrown from within a traveler's node handler, or it's `go` method. The traveler's `find` method then catches that instance and returns it. This is particularly useful for searching specific nodes and preventing the traveler to unnecessarily go through the entire AST.
 
 This example shows how to look for the first function declaration:
 
