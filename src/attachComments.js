@@ -47,7 +47,6 @@ function attachComments( parent, children, findHeadingComments, state, traveler 
 					child.comments = boundComments
 				// Travel through child
 				state.index = index
-				// console.log( 'comment', comment )
 				traveler[ child.type ]( child, state )
 				index = state.index
 				comment = comments[ index ]

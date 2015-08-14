@@ -28,24 +28,19 @@ var traveler = astravel.makeCustomTraveler({
 		}
 	},
 	VariableDeclarator: function(node, state) {
-		// Only consider id
 		this.go(node.id, state);
 	},
 	ObjectPattern: function(node, state) {
-		if (state.inDeclaration)
-			this.super.ObjectPattern.call(this, node, state);
+		if (state.inDeclaration) this.super.ObjectPattern.call(this, node, state);
 	},
 	ArrayPattern: function(node, state) {
-		if (state.inDeclaration)
-			this.super.ArrayPattern.call(this, node, state);
+		if (state.inDeclaration) this.super.ArrayPattern.call(this, node, state);
 	},
 	Property: function(node, state) {
-		if (state.inDeclaration)
-			this.go(node.value, state);
+		if (state.inDeclaration) this.go(node.value, state);
 	},
 	Identifier: function(node, state) {
-		if (state.inDeclaration)
-			state.names.push(node.name);
+		if (state.inDeclaration) state.names.push(node.name);
 	},
 	FunctionExpression: ignore,
 	ArrowFunctionExpression: ignore

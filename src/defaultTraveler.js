@@ -129,7 +129,7 @@ export default {
 		this.go( node.body, state )
 	},
 	ForInStatement: ForInStatement = function( node, state ) {
-		this.ForInit( node.left, state )
+		this.go( node.left, state )
 		this.go( node.right, state )
 		this.go( node.body, state )
 	},
