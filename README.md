@@ -57,7 +57,7 @@ This object describes a basic AST traveler. It contains the following methods:
 - `go(node, state)`: Travels through the provided AST `node` with a given `state` (an object that can be of any type) by recursively calling this method.
 - `find(node, state) ➞ Found?`: Travels through the provided AST `node` with a given `state`. If it catches a `Found` instance, returns it. Otherwise, returns nothing.
 - `[NodeType](node, state)`: Method handler for a specific `NodeType`.
-- `makeChild(properties) ➞ traveler`: Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
+- `makeChild(properties) ➞ traveler`: Returns a custom AST traveler that inherits from `this` traveler with its own provided `properties` and the property `super` that points to `this` traveler.
 
 
 #### astravel.makeTraveler(properties) ➞ traveler
