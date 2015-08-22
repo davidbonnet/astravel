@@ -45,29 +45,29 @@ The path to the module file is `dist/astravel.min.js` and can be linked to from 
 The `astravel` module consists of the following items:
 
 - [defaultTraveler](#astraveldefaulttraveler)
-- [makeCustomTraveler(properties) ➞ traveler](#astravelmakecustomtravelerproperties--traveler)
+- [makeTraveler(properties) ➞ traveler](#astravelmaketravelerproperties--traveler)
 - [Found(node, state)](#astravelfoundnode-state)
 - [attachComments(ast, comments) ➞ ast](#astravelattachcommentsast-comments--ast)
 
 
 #### astravel.defaultTraveler
 
-This object contains the following methods:
+This object describes a basic AST traveler. It contains the following methods:
 
-- `go(node, state)`: Travels through the provided `node` with a given `state` (an object that can be of any type) by recursively calling this method.
-- `find(node, state)`: Travels through the provided AST `node` with a given `state`. If it catches a `Found` instance, returns it. Otherwise, returns nothing.
+- `go(node, state)`: Travels through the provided AST `node` with a given `state` (an object that can be of any type) by recursively calling this method.
+- `find(node, state) ➞ Found?`: Travels through the provided AST `node` with a given `state`. If it catches a `Found` instance, returns it. Otherwise, returns nothing.
 - `[NodeType](node, state)`: Method handler for a specific `NodeType`.
-- `makeCustom(properties)`: Returns a traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
+- `makeChild(properties) ➞ traveler`: Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
 
 
-#### astravel.makeCustomTraveler(properties) ➞ traveler
+#### astravel.makeTraveler(properties) ➞ traveler
 
-This function is similar to `astravel.defaultTraveler.makeCustom`: it returns a traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the `defaultTraveler` object. These properties should redefine the traveler's behavior by implementing the `go(node, state)` method and/or any node handler.
+This function is similar to `astravel.defaultTraveler.makeChild`: it returns a traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the `defaultTraveler` object. These properties should redefine the traveler's behavior by implementing the `go(node, state)` method and/or any node handler.
 
 When redefining the `go` method, make sure its basic functionality is kept by calling the parent's `go` method to keep traveling through the AST:
 
 ```javascript
-var customTraveler = astravel.makeCustomTraveler({
+var customTraveler = astravel.makeTraveler({
    go: function(node, state) {
       // Code before entering the node
       console.log('Entering ' + node.type);
@@ -83,7 +83,7 @@ To skip specific node types, the most effective way is to replace the correspond
 
 ```javascript
 var ignore = Function.prototype;
-var customTraveler = astravel.makeCustomTraveler({
+var customTraveler = astravel.makeTraveler({
    FunctionDeclaration: ignore,
    FunctionExpression: ignore,
    ArrowFunctionExpression: ignore
@@ -98,7 +98,7 @@ This class creates an instance by initializing its `node` and `state` properties
 This example shows how to look for the first function declaration:
 
 ```javascript
-var customTraveler = astravel.makeCustomTraveler({
+var customTraveler = astravel.makeTraveler({
    FunctionDeclaration: function(node, state) {
       // Found first function declaration, end travel
       throw new astravel.Found(node, state);
@@ -202,3 +202,4 @@ npm test
 
 - Provide a set of examples
 - Show how to modify an AST
+

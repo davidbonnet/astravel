@@ -68,7 +68,7 @@ function attachComments( parent, children, findHeadingComments, state, traveler 
 let Program
 
 
-let customTraveler = defaultTraveler.makeCustom( {
+let customTraveler = defaultTraveler.makeChild( {
 	Program: Program = function( node, state ) {
 		attachComments( node, node.body, true, state, this )
 	},

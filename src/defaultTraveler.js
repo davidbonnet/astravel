@@ -15,6 +15,7 @@ export default {
 	go( node, state ) {
 		/*
 		Starts travelling through the specified AST `node` with the provided `state`.
+		This method is recursively called by each node handler.
 		*/
 		this[ node.type ]( node, state )
 	},
@@ -32,15 +33,15 @@ export default {
             throw error;
       }
    },
-	makeCustom( properties ) {
+	makeChild( properties = {} ) {
 		/*
-		Returns a custom AST traveler object based on this one.
+		Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
 		*/
-		let customTraveler = Object.create( this )
-		customTraveler.super = this
+		let traveler = Object.create( this )
+		traveler.super = this
 		for ( let key in properties )
-			customTraveler[ key ] = properties[ key ]
-		return customTraveler
+			traveler[ key ] = properties[ key ]
+		return traveler
 	},
 
 	// JavaScript 5

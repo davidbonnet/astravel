@@ -13,15 +13,11 @@ import defaultTraveler from "./defaultTraveler"
 import attachComments from "./attachComments"
 
 
-function makeCustomTraveler( properties ) {
+function makeTraveler( properties ) {
 	/*
-	Returns a custom AST traveler object based on the default traveler.
+	Returns a custom AST traveler object based on the default traveler and the provided `properties`.
 	*/
-	let customTraveler = Object.create( defaultTraveler )
-	for ( let key in properties )
-		customTraveler[ key ] = properties[ key ]
-	customTraveler.super = defaultTraveler
-	return customTraveler
+	return defaultTraveler.makeChild( properties )
 }
 
 
@@ -33,5 +29,5 @@ class Found {
 }
 
 
-export { defaultTraveler, attachComments, makeCustomTraveler, Found }
+export { defaultTraveler, attachComments, makeTraveler, Found }
 
