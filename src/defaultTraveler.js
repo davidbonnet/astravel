@@ -35,7 +35,7 @@ export default {
    },
 	makeChild( properties = {} ) {
 		/*
-		Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
+		Returns a custom AST traveler that inherits from `this` traveler with its own provided `properties` and the property `super` that points to the parent traveler object.
 		*/
 		let traveler = Object.create( this )
 		traveler.super = this

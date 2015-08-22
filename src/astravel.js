@@ -15,7 +15,7 @@ import attachComments from "./attachComments"
 
 function makeTraveler( properties ) {
 	/*
-	Returns a custom AST traveler object based on the default traveler and the provided `properties`.
+	Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
 	*/
 	return defaultTraveler.makeChild( properties )
 }
