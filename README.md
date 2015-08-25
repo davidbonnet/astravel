@@ -138,7 +138,7 @@ astravel.attachComments(ast, comments);
 
 The algorithm assumes that comments are not put in exotic places, such as in-between function arguments, and proceeds as follows:
 
-- For a given statement, it attaches all comments right above it and on the same line to it's right side.
+- For a given statement, it stores all comments right above it and on the same line to it's right side in a `comments` property.
 - If a comment block is at the beginning of a code block, it is attached to that code block.
 - Comments not followed by any statement in a code block are attached as `trailingComments` to that code block.
 
@@ -147,21 +147,21 @@ In this example, the comments tell to which statement they are attached:
 ```javascript
 // Attached to the variable declaration just below
 var point = {
-   // This comment is attached to the property definition just below
+   // Attached to the property definition just below
    x: 0,
-   y: 0 // This comment is attached to the property definition on its left
+   y: 0 // Attached to the property definition on its left
 };
 /*
-This comment block is attached to the function declaration just below.
+Attached to the function declaration just below.
 */
 function add(a, b) {
    /*
-   This secondary comment block is attached to the function body.
+   Attached to the function body because it is the first comment block.
    */
-   return a + b; // This comment is attached to the return statement on its left
-   // This trailing comment is attached as such to the function body
+   return a + b; // Attached to the return statement on its left
+   // Trailing comment attached as such to the function body
 }
-// This trailing comment is attached as such to the program body
+// Trailing comment attached as such to the program body
 ```
 
 
