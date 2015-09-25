@@ -177,9 +177,9 @@ export default {
 			this.go( properties[ i ], state )
 	},
 	Property( node, state ) {
-		this.go( node.key )
+		this.go( node.key, state )
 		if ( !node.shorthand )
-			this.go( node.value )
+			this.go( node.value, state )
 	},
 	FunctionExpression: FunctionDeclaration,
 	SequenceExpression( node, state ) {

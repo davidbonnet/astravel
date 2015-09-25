@@ -69,17 +69,17 @@ let Program
 
 
 let customTraveler = defaultTraveler.makeChild( {
-	Program: Program = function( node, state ) {
+	Program: Program = function ( node, state ) {
 		attachComments( node, node.body, true, state, this )
 	},
 	BlockStatement: Program,
-	ObjectExpression: function( node, state ) {
+	ObjectExpression( node, state ) {
 		attachComments( node, node.properties, true, state, this )
 	},
-	SwitchStatement: function( node, state ) {
+	SwitchStatement( node, state ) {
 		attachComments( node, node.cases, false, state, this )
 	},
-	SwitchCase: function( node, state ) {
+	SwitchCase( node, state ) {
 		attachComments( node, node.consequent, false, state, this )
 	}
 	// TODO: Consider ArrayExpression ?
