@@ -14,6 +14,7 @@ function attachComments( parent, children, findHeadingComments, state, traveler 
 				boundComments.push( comment )
 				comment = comments[ ++index ]
 			}
+			state.index = index
 			if ( boundComments.length !== 0 && parent.comments == null )
 				parent.comments = boundComments
 		} else {
