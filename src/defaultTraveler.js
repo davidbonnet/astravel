@@ -104,12 +104,14 @@ export default {
 	},
 	TryStatement( node, state ) {
 		this.go( node.block, state )
-		if ( node.handler != null ) {
-			this.go( node.handler.param, state )
-			this.go( node.handler.body, state )
-		}
+		if ( node.handler != null )
+			this.go( node.handler, state )
 		if ( node.finalizer != null )
 			this.go( node.finalizer, state )
+	},
+	CatchClause( node, state ) {
+		this.go( node.param, state )
+		this.go( node.body, state )
 	},
 	WhileStatement( node, state ) {
 		this.go( node.test, state )
