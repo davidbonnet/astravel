@@ -83,7 +83,6 @@ export default {
 		this.go( node.body, state )
 	},
 	SwitchStatement( node, state ) {
-		const { lineEnd, code } = state
 		this.go( node.discriminant, state )
 		const { cases } = node;
 		for ( let i = 0, { length } = cases; i < length; i++ )
