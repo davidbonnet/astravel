@@ -280,7 +280,7 @@ export default {
 			for ( let i = 0, { length } = params; i < length; i++ )
 				this.go( params[ i ], state )
 		}
-		this.go( node.value.body, state )
+		this.go( node.value, state )
 	},
 	ClassExpression( node, state ) {
 		this.ClassDeclaration( node, state )
