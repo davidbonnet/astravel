@@ -24,15 +24,15 @@ export default {
 		Starts travelling through the specified AST `node` with the provided `state`.
 		If it catches a `Found` instance, returns it. Otherwise, returns `undefined`.
 		*/
-      try {
-         this.go( node, state );
-      } catch ( error ) {
-         if ( error instanceof Found )
-            return error;
-         else
-            throw error;
-      }
-   },
+			try {
+				 this.go( node, state );
+			} catch ( error ) {
+				 if ( error instanceof Found )
+						return error;
+				 else
+						throw error;
+			}
+	 },
 	makeChild( properties = {} ) {
 		/*
 		Returns a custom AST traveler that inherits from `this` traveler with its own provided `properties` and the property `super` that points to the parent traveler object.
@@ -240,6 +240,7 @@ export default {
 		if ( length > 0 )
 			for ( let i = 0; i < length; i++ )
 				this.go( specifiers[ i ], state )
+		this.go( node.source, state )
 	},
 	ImportNamespaceSpecifier: ignore,
 	ImportDefaultSpecifier: ignore,
