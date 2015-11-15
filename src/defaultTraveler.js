@@ -233,7 +233,12 @@ export default {
 		if ( node.superClass )
 			this.go( node.superClass, state )
 		// ClassBody
-		this.BlockStatement( node.body, state )
+		this.go( node.body, state )
+	},
+	ClassBody( node, state ) {
+		const { body } = node
+		for ( let i = 0, { length } = body; i < length; i++ )
+			this.go( body[ i ], state )
 	},
 	ImportDeclaration( node, state ) {
 		const { specifiers } = node, { length } = specifiers
