@@ -242,9 +242,16 @@ export default {
 				this.go( specifiers[ i ], state )
 		this.go( node.source, state )
 	},
-	ImportNamespaceSpecifier: ignore,
-	ImportDefaultSpecifier: ignore,
-	ImportSpecifier: ignore,
+	ImportNamespaceSpecifier( node, state ) {
+		this.go( node.local, state )
+	},
+	ImportDefaultSpecifier( node, state ) {
+		this.go( node.local, state )
+	},
+	ImportSpecifier( node, state ) {
+		this.go( node.imported, state )
+		this.go( node.local, state )
+	},
 	ExportDefaultDeclaration( node, state ) {
 		this.go( node.declaration, state )
 	},
@@ -255,10 +262,16 @@ export default {
 			const { specifiers } = node, { length } = specifiers
 			for ( let i = 0; i < length; i++ )
 				this.go( specifiers[ i ], state )
+			if ( node.source )
+				this.go( node.source, state )
 		}
 	},
-	ExportSpecifier: ignore,
-	ExportAllDeclaration: ignore,
+	ExportSpecifier( node, state ) {
+		this.go( node.exported, state )
+	},
+	ExportAllDeclaration( node, state ) {
+		this.go( node.source, state )
+	},
 	MethodDefinition( node, state ) {
 		this.go( node.key, state )
 		const { params } = node.value
