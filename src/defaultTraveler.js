@@ -267,6 +267,7 @@ export default {
 		}
 	},
 	ExportSpecifier( node, state ) {
+		this.go( node.local, state )
 		this.go( node.exported, state )
 	},
 	ExportAllDeclaration( node, state ) {
