@@ -229,7 +229,8 @@ export default {
 	// JavaScript 6
 	ForOfStatement: ForInStatement,
 	ClassDeclaration( node, state ) {
-		this.go( node.id, state )
+		if ( node.id )
+			this.go( node.id, state )
 		if ( node.superClass )
 			this.go( node.superClass, state )
 		// ClassBody
