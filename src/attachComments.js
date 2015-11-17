@@ -77,6 +77,9 @@ let customTraveler = defaultTraveler.makeChild( {
 	ObjectExpression( node, state ) {
 		attachComments( node, node.properties, true, state, this )
 	},
+	ArrayExpression( node, state ) {
+		attachComments( node, node.elements, true, state, this )
+	},
 	SwitchStatement( node, state ) {
 		attachComments( node, node.cases, false, state, this )
 	},
