@@ -300,15 +300,18 @@ export default {
 		if ( node.argument )
 			this.go( node.argument, state )
 	},
-	TemplateLiteral( node, state ) {
-		const { quasis, expressions } = node
-		for ( let i = 0, { length } = expressions; i < length; i++ )
-			this.go( expressions[ i ], state )
-	},
 	TaggedTemplateExpression( node, state ) {
 		this.go( node.tag, state )
 		this.go( node.quasi, state )
 	},
+	TemplateLiteral( node, state ) {
+		const { quasis, expressions } = node
+		for ( let i = 0, { length } = expressions; i < length; i++ )
+			this.go( expressions[ i ], state )
+		for ( let i = 0, { length } = quasis; i < length; i++ )
+			this.go( quasis[ i ], state )
+	},
+	TemplateElement: ignore,
 	ObjectPattern( node, state ) {
 		const { properties } = node, { length } = properties
 		for ( let i = 0; i < length; i++ )
