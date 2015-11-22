@@ -281,11 +281,6 @@ export default {
 	},
 	MethodDefinition( node, state ) {
 		this.go( node.key, state )
-		const { params } = node.value
-		if ( params ) {
-			for ( let i = 0, { length } = params; i < length; i++ )
-				this.go( params[ i ], state )
-		}
 		this.go( node.value, state )
 	},
 	ClassExpression( node, state ) {
