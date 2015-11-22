@@ -9,8 +9,8 @@
 // https://github.com/davidbonnet/astravel/issues
 
 
-import defaultTraveler from "./defaultTraveler"
-import attachComments from "./attachComments"
+import defaultTraveler from './defaultTraveler'
+import attachComments from './attachComments'
 
 
 function makeTraveler( properties ) {

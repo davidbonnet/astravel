@@ -1,6 +1,4 @@
-
-
-import { Found } from "./astravel"
+import { Found } from './astravel'
 
 
 var ForInStatement, FunctionDeclaration, RestElement, BinaryExpression, ArrayExpression
@@ -24,15 +22,15 @@ export default {
 		Starts travelling through the specified AST `node` with the provided `state`.
 		If it catches a `Found` instance, returns it. Otherwise, returns `undefined`.
 		*/
-			try {
-				 this.go( node, state );
-			} catch ( error ) {
-				 if ( error instanceof Found )
-						return error;
-				 else
-						throw error;
-			}
-	 },
+		try {
+			 this.go( node, state )
+		} catch ( error ) {
+			 if ( error instanceof Found )
+				return error
+			else
+				throw error
+		}
+	},
 	makeChild( properties = {} ) {
 		/*
 		Returns a custom AST traveler that inherits from `this` traveler with its own provided `properties` and the property `super` that points to the parent traveler object.
@@ -46,12 +44,12 @@ export default {
 
 	// JavaScript 5
 	Program( node, state ) {
-		let statements = node.body
-		for ( let i = 0, { length } = statements; i < length; i++ )
+		const statements = node.body, { length } = statements
+		for ( let i = 0; i < length; i++ )
 			this.go( statements[ i ], state )
 	},
 	BlockStatement( node, state ) {
-		let statements = node.body
+		const statements = node.body
 		if ( statements != null )
 			for ( let i = 0, { length } = statements; i < length; i++ )
 				this.go( statements[ i ], state )
@@ -84,15 +82,15 @@ export default {
 	},
 	SwitchStatement( node, state ) {
 		this.go( node.discriminant, state )
-		const { cases } = node;
-		for ( let i = 0, { length } = cases; i < length; i++ )
+		const { cases } = node, { length } = cases
+		for ( let i = 0; i < length; i++ )
 			this.go( cases[ i ], state )
 	},
 	SwitchCase( node, state ) {
 		if ( node.test != null )
 			this.go( node.test, state )
-		let statements = node.consequent
-		for ( let i = 0, { length } = statements; i < length; i++ )
+		const statements = node.consequent, { length } = statements
+		for ( let i = 0; i < length; i++ )
 			this.go( statements[ i ], state )
 	},
 	ReturnStatement( node, state ) {
@@ -140,14 +138,14 @@ export default {
 		if ( node.id != null )
 			this.go( node.id, state )
 		const { params } = node
-		if ( params != null && params.length !== 0 )
+		if ( params != null )
 			for ( let i = 0, { length } = params; i < length; i++ )
 				this.go( params[ i ], state )
 		this.go( node.body, state )
 	},
 	VariableDeclaration( node, state ) {
-		const { declarations } = node
-		for ( let i = 0, { length } = declarations; i < length; i++ )
+		const { declarations } = node, { length } = declarations
+		for ( let i = 0; i < length; i++ )
 			this.go( declarations[ i ], state )
 	},
 	VariableDeclarator( node, state ) {
@@ -157,20 +155,16 @@ export default {
 	},
 	ArrowFunctionExpression( node, state ) {
 		const { params } = node
-		if ( params != null && params.length !== 0 ) {
-			for ( let i = 0, { length } = params; i < length; i++ ) {
-				let param = params[ i ]
-				this.go( param, state )
-			}
-		}
+		if ( params != null )
+			for ( let i = 0, { length } = params; i < length; i++ )
+				this.go( params[ i ], state )
 		this.go( node.body, state )
 	},
 	ThisExpression: ignore,
 	ArrayExpression: ArrayExpression = function( node, state ) {
-		for ( let i = 0, { elements } = node, { length } = elements; i < length; i++ ) {
-			let element = elements[ i ]
-			this.go( element, state )
-		}
+		const { elements } = node, { length } = elements
+		for ( let i = 0; i < length; i++ )
+			this.go( elements[ i ], state )
 	},
 	ObjectExpression( node, state ) {
 		const { properties } = node, { length } = properties
@@ -184,11 +178,9 @@ export default {
 	},
 	FunctionExpression: FunctionDeclaration,
 	SequenceExpression( node, state ) {
-		const { expressions } = node
-		for ( let i = 0, { length } = expressions; i < length; i++ ) {
-			let expression = expressions[ i ]
-			this.go( expression, state )
-		}
+		const { expressions } = node, { length } = expressions
+		for ( let i = 0; i < length; i++ )
+			this.go( expressions[ i ], state )
 	},
 	UnaryExpression( node, state ) {
 		this.go( node.argument, state )
@@ -215,8 +207,8 @@ export default {
 	},
 	CallExpression( node, state ) {
 		this.go( node.callee, state )
-		const args = node[ 'arguments' ]
-		for ( let i = 0, { length } = args; i < length; i++ )
+		const args = node[ 'arguments' ], { length } = args
+		for ( let i = 0; i < length; i++ )
 			this.go( args[ i ], state )
 	},
 	MemberExpression( node, state ) {
@@ -236,15 +228,14 @@ export default {
 		this.go( node.body, state )
 	},
 	ClassBody( node, state ) {
-		const { body } = node
-		for ( let i = 0, { length } = body; i < length; i++ )
+		const { body } = node, { length } = body
+		for ( let i = 0; i < length; i++ )
 			this.go( body[ i ], state )
 	},
 	ImportDeclaration( node, state ) {
 		const { specifiers } = node, { length } = specifiers
-		if ( length > 0 )
-			for ( let i = 0; i < length; i++ )
-				this.go( specifiers[ i ], state )
+		for ( let i = 0; i < length; i++ )
+			this.go( specifiers[ i ], state )
 		this.go( node.source, state )
 	},
 	ImportNamespaceSpecifier( node, state ) {

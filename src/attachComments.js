@@ -1,6 +1,4 @@
-
-
-import defaultTraveler from "./defaultTraveler"
+import defaultTraveler from './defaultTraveler'
 
 
 function attachComments( parent, children, findHeadingComments, state, traveler ) {
@@ -70,7 +68,7 @@ let Program
 
 
 let customTraveler = defaultTraveler.makeChild( {
-	Program: Program = function ( node, state ) {
+	Program: Program = function( node, state ) {
 		attachComments( node, node.body, true, state, this )
 	},
 	BlockStatement: Program,
