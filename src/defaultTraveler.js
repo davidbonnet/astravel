@@ -233,7 +233,6 @@ export default {
 			this.go( node.id, state )
 		if ( node.superClass )
 			this.go( node.superClass, state )
-		// ClassBody
 		this.go( node.body, state )
 	},
 	ClassBody( node, state ) {
