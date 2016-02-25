@@ -309,6 +309,10 @@ export default {
 	AssignmentPattern( node, state ) {
 		this.go( node.left, state )
 		this.go( node.right, state )
+	},
+	MetaProperty( node, state ) {
+		this.go( node.meta )
+		this.go( node.property )
 	}
 
 }
