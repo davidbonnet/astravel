@@ -163,8 +163,11 @@ export default {
 	ThisExpression: ignore,
 	ArrayExpression: ArrayExpression = function( node, state ) {
 		const { elements } = node, { length } = elements
-		for ( let i = 0; i < length; i++ )
-			this.go( elements[ i ], state )
+		for ( let i = 0; i < length; i++ ) {
+			let element = elements[ i ]
+			if ( element != null )
+				this.go( elements[ i ], state )
+		}
 	},
 	ObjectExpression( node, state ) {
 		const { properties } = node, { length } = properties
