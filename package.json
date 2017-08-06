@@ -32,10 +32,10 @@
   "devDependencies": {
     "acorn": "^5.0.2",
     "astring": "^1.0.5",
-    "babelify": "^7.3.0",
     "babel-cli": "^6.24.0",
     "babel-preset-babili": "^0.1.4",
     "babel-preset-env": "^1.5.2",
+    "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "codecov": "^2.3.0",
     "cross-env": "^5.0.1",
