@@ -18,7 +18,7 @@ A tiny and fast [ESTree](https://github.com/estree/estree)-compliant AST walker 
 
 ## Installation
 
-The easiest way is to install it with the [Node Package Manager](https://www.npmjs.com/package/astravel):
+Install with the [Node Package Manager](https://www.npmjs.com/package/astravel):
 
 ```bash
 npm install astravel
@@ -32,17 +32,13 @@ cd astravel
 npm install
 ```
 
-The path to the module file is `dist/astravel.min.js` and can be linked to from an HTML webpage. When used in a browser environment, the module exposes a global variable `astravel`:
-
-```html
-<script src="astravel.min.js" type="text/javascript"></script>
-```
+A browser-ready minified version of Astravel is available at `dist/astravel.min.js`.
 
 
 
 ## Usage
 
-The `astravel` module consists of the following items:
+The `astravel` module exports the following items:
 
 - [defaultTraveler](#astraveldefaulttraveler)
 - [makeTraveler(properties) ➞ traveler](#astravelmaketravelerproperties--traveler)
@@ -68,26 +64,26 @@ When redefining the `go` method, make sure its basic functionality is kept by ca
 
 ```javascript
 var customTraveler = astravel.makeTraveler({
-   go: function(node, state) {
-      // Code before entering the node
-      console.log('Entering ' + node.type);
-      // Call the parent's `go` method
-      this.super.go.call(this, node, state);
-      // Code after leaving the node
-      console.log('Leaving ' + node.type);
-   }
-});
+  go: function(node, state) {
+    // Code before entering the node
+    console.log('Entering ' + node.type)
+    // Call the parent's `go` method
+    this.super.go.call(this, node, state)
+    // Code after leaving the node
+    console.log('Leaving ' + node.type)
+  },
+})
 ```
 
 To skip specific node types, the most effective way is to replace the corresponding node handlers with a function that does nothing:
 
 ```javascript
-var ignore = Function.prototype;
+var ignore = Function.prototype
 var customTraveler = astravel.makeTraveler({
-   FunctionDeclaration: ignore,
-   FunctionExpression: ignore,
-   ArrowFunctionExpression: ignore
-});
+  FunctionDeclaration: ignore,
+  FunctionExpression: ignore,
+  ArrowFunctionExpression: ignore,
+})
 ```
 
 
@@ -99,14 +95,14 @@ This example shows how to look for the first function declaration:
 
 ```javascript
 var customTraveler = astravel.makeTraveler({
-   FunctionDeclaration: function(node, state) {
-      // Found first function declaration, end travel
-      throw new astravel.Found(node, state);
-   }
-});
+  FunctionDeclaration: function(node, state) {
+    // Found first function declaration, end travel
+    throw new astravel.Found(node, state)
+  },
+})
 // Get the first function declaration, if any
-var found = customTraveler.find(node);
-if (found) console.log('Found function named ' + found.node.id.name);
+var found = customTraveler.find(node)
+if (found) console.log('Found function named ' + found.node.id.name)
 ```
 
 
@@ -147,19 +143,19 @@ In this example, the comments tell to which statement they are attached:
 ```javascript
 // Attached to the variable declaration just below
 var point = {
-   // Attached to the property definition just below
-   x: 0,
-   y: 0 // Attached to the property definition on its left
-};
+  // Attached to the property definition just below
+  x: 0,
+  y: 0, // Attached to the property definition on its left
+}
 /*
 Attached to the function declaration just below.
 */
 function add(a, b) {
-   /*
+  /*
    Attached to the function body because it is the first comment block.
    */
-   return a + b; // Attached to the return statement on its left
-   // Trailing comment attached as such to the function body
+  return a + b // Attached to the return statement on its left
+  // Trailing comment attached as such to the function body
 }
 // Trailing comment attached as such to the program body
 ```
@@ -170,36 +166,43 @@ function add(a, b) {
 
 All building scripts are defined in the `package.json` file and rely on the [Node Package Manager](https://www.npmjs.com/). All commands must be run from within the root repository folder.
 
+
 ### Production
 
-The source code of Astravel is written in JavaScript 6 and located at `src/astravel.js`. It is compiled down to a minified JavaScript 5 file located at `dist/astravel.min.js` using [Browserify](http://browserify.org), [Babel](http://babeljs.io/) and [UglifyJS](https://github.com/mishoo/UglifyJS2). This is achieved by running:
-```bash
-npm install
-```
+Production code can be obtained from the `dist` folder by running:
 
-If you are already using a JavaScript 6 to 5 compiler for your project, or a JavaScript 6 compliant interpreter, you can include the `src/astravel.js` file directly.
-
-A non-minified and source map free version can be obtained at `dist/astravel.js` by running:
 ```bash
 npm run build
 ```
 
+If you are already using a JavaScript 6 to 5 compiler for your project, or a JavaScript 6 compliant interpreter, you can include the `src/astravel.js` file directly.
+
+A minified version of Astravel with source maps can be obtained at `dist/astravel.min.js` by running:
+
+```bash
+npm run build:minified
+```
+
+
 ### Development
 
-If you are working on Astravel, you can use [Watchify](https://github.com/substack/watchify) to build automatically at each modification a non-minified version (along with a source map for easy debugging) located at `dist/astravel.debug.js` by running:
+If you are working on Astring, you can enable Babel's watch mode to automatically transpile to the `dist` folder at each update by running:
+
 ```bash
 npm start
 ```
 
-While making changes to Astravel, make sure it passes the tests by running:
+
+#### Tests
+
+While making changes to Astravel, make sure it passes the tests (it checks code formatting and unit tests):
+
 ```bash
 npm test
 ```
 
 
 
-## TODO
+## Roadmap
 
-- Provide a set of examples
-- Show how to modify an AST
-
+Planned features and releases are outlined on the [milestones page](https://github.com/davidbonnet/astravel/milestones).
