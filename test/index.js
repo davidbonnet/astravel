@@ -14,7 +14,7 @@ function getAst(filename, ecmaVersion, sourceType = 'module') {
     sourceType,
   }
   const code = normalizeNewline(
-    fs.readFileSync(path.join(DIRNAME, filename), 'utf8')
+    fs.readFileSync(path.join(DIRNAME, filename), 'utf8'),
   )
   const ast = parse(code, options)
   return ast
