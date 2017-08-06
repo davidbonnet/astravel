@@ -1,17 +1,16 @@
 # Astravel
 
-[![Build Status](https://travis-ci.org/davidbonnet/astravel.svg?branch=master)](https://travis-ci.org/davidbonnet/astravel)
 [![NPM Version](https://img.shields.io/npm/v/astravel.svg)](https://www.npmjs.org/package/astravel)
-[![Dependency Status](https://david-dm.org/davidbonnet/astravel.svg)](https://david-dm.org/davidbonnet/astravel)
+[![Build Status](https://travis-ci.org/davidbonnet/astravel.svg?branch=master)](https://travis-ci.org/davidbonnet/astravel)
+[![Coverage](https://codecov.io/gh/davidbonnet/astravel/branch/master/graph/badge.svg)](https://codecov.io/gh/davidbonnet/astravel)
 [![devDependency Status](https://david-dm.org/davidbonnet/astravel/dev-status.svg)](https://david-dm.org/davidbonnet/astravel#info=devDependencies)
 
 A tiny and fast [ESTree](https://github.com/estree/estree)-compliant AST walker and modifier.
 
-Key features:
+### Key features
 
 - Works on [ESTree](https://github.com/estree/estree)-compliant ASTs such as the ones produced by [Acorn](https://github.com/marijnh/acorn).
-- Runs both in a browser and in [Node](http://nodejs.org).
-- Out-of-the-box functions such as source code comments insertion.
+- Out-of-the-box functions such as source code comments insertion for [Astring](https://github.com/davidbonnet/astring).
 - No dependencies and small footprint.
 
 
