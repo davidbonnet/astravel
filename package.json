@@ -41,6 +41,7 @@
     "cross-env": "^5.0.1",
     "eslint": "^4.1.0",
     "eslint-plugin-import": "^2.6.0",
+    "normalize-newline": "^3.0.0",
     "prettier": "^1.5.0",
     "tap": "^10.7.0"
   }
