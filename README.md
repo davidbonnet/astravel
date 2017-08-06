@@ -1,11 +1,10 @@
 # Astravel
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/davidbonnet/astravel.svg)](https://greenkeeper.io/)
-
 [![NPM Version](https://img.shields.io/npm/v/astravel.svg)](https://www.npmjs.org/package/astravel)
 [![Build Status](https://travis-ci.org/davidbonnet/astravel.svg?branch=master)](https://travis-ci.org/davidbonnet/astravel)
 [![Coverage](https://codecov.io/gh/davidbonnet/astravel/branch/master/graph/badge.svg)](https://codecov.io/gh/davidbonnet/astravel)
 [![devDependency Status](https://david-dm.org/davidbonnet/astravel/dev-status.svg)](https://david-dm.org/davidbonnet/astravel#info=devDependencies)
+[![Greenkeeper](https://badges.greenkeeper.io/davidbonnet/astravel.svg)](https://greenkeeper.io/)
 
 A tiny and fast [ESTree](https://github.com/estree/estree)-compliant AST walker and modifier.
 
