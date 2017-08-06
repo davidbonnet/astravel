@@ -18,11 +18,4 @@ function makeTraveler(properties) {
   return defaultTraveler.makeChild(properties)
 }
 
-class Found {
-  constructor(node, state) {
-    this.node = node
-    this.state = state
-  }
-}
-
-export { defaultTraveler, attachComments, makeTraveler, Found }
+export { defaultTraveler, attachComments, makeTraveler }

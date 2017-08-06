@@ -1,5 +1,3 @@
-import { Found } from './astravel'
-
 let ForInStatement,
   FunctionDeclaration,
   RestElement,
@@ -7,6 +5,13 @@ let ForInStatement,
   ArrayExpression
 
 const ignore = Function.prototype
+
+class Found {
+  constructor(node, state) {
+    this.node = node
+    this.state = state
+  }
+}
 
 export default {
   // Basic methods
@@ -17,13 +22,21 @@ export default {
     */
     this[node.type](node, state)
   },
-  find(node, state) {
+  find(predicate, node, state) {
     /*
-    Starts travelling through the specified AST `node` with the provided `state`.
-    If it catches a `Found` instance, returns it. Otherwise, returns `undefined`.
+    Returns { node, state } for which `predicate(node, state)` returns truthy,
+    starting at the specified AST `node` and with the provided `state`.
+    Otherwise, returns `undefined`.
     */
+    const finder = Object.create(this)
+    finder.go = function(node, state) {
+      if (predicate(node, state)) {
+        throw new Found(node, state)
+      }
+      this[node.type](node, state)
+    }
     try {
-      this.go(node, state)
+      finder.go(node, state)
     } catch (error) {
       if (error instanceof Found) {
         return error

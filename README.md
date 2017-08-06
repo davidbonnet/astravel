@@ -42,7 +42,6 @@ The `astravel` module exports the following items:
 
 - [defaultTraveler](#astraveldefaulttraveler)
 - [makeTraveler(properties) ➞ traveler](#astravelmaketravelerproperties--traveler)
-- [Found(node, state)](#astravelfoundnode-state)
 - [attachComments(ast, comments) ➞ ast](#astravelattachcommentsast-comments--ast)
 
 
@@ -51,7 +50,7 @@ The `astravel` module exports the following items:
 This object describes a basic AST traveler. It contains the following methods:
 
 - `go(node, state)`: Travels through the provided AST `node` with a given `state` (an object that can be of any type) by recursively calling this method.
-- `find(node, state) ➞ Found?`: Travels through the provided AST `node` with a given `state`. If it catches a `Found` instance, returns it. Otherwise, returns nothing.
+- `find(predicate, node, state) ➞ { node, state }?`: Returns `{ node, state }` for which `predicate(node, state)` returns truthy, starting at the specified AST `node` and with the provided `state`. Otherwise, returns `undefined`.
 - `[NodeType](node, state)`: Method handler for a specific `NodeType`.
 - `makeChild(properties) ➞ traveler`: Returns a custom AST traveler that inherits from `this` traveler with its own provided `properties` and the property `super` that points to `this` traveler.
 
@@ -84,25 +83,6 @@ var customTraveler = astravel.makeTraveler({
   FunctionExpression: ignore,
   ArrowFunctionExpression: ignore,
 })
-```
-
-
-#### astravel.Found(node, state)
-
-This class creates an instance by initializing its `node` and `state` properties to the values provided to the constructor arguments. Its purpose is to be thrown from within a traveler's node handler, or it's `go` method. The traveler's `find` method then catches that instance and returns it. This is particularly useful for searching specific nodes and preventing the traveler to unnecessarily go through the entire AST.
-
-This example shows how to look for the first function declaration:
-
-```javascript
-var customTraveler = astravel.makeTraveler({
-  FunctionDeclaration: function(node, state) {
-    // Found first function declaration, end travel
-    throw new astravel.Found(node, state)
-  },
-})
-// Get the first function declaration, if any
-var found = customTraveler.find(node)
-if (found) console.log('Found function named ' + found.node.id.name)
 ```
 
 
