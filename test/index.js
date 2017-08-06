@@ -4,14 +4,16 @@ const normalizeNewline = require('normalize-newline')
 const { test } = require('tap')
 const { parse } = require('acorn')
 
-const { defaultTraveler, Found } = require('../dist/astravel')
+const { defaultTraveler, Found, attachComments } = require('../dist/astravel')
 
 const DIRNAME = path.join(__dirname, 'samples')
 
-function getAst(filename, ecmaVersion, sourceType = 'module') {
+function getAst(filename, ecmaVersion, sourceType = 'module', onComment) {
   const options = {
     ecmaVersion,
     sourceType,
+    locations: onComment != null,
+    onComment,
   }
   const code = normalizeNewline(
     fs.readFileSync(path.join(DIRNAME, filename), 'utf8'),
@@ -31,15 +33,11 @@ test('Default traveler', assert => {
   })
 
   assert.test('Find node', assert => {
-    const returnNodeFinder = defaultTraveler.makeChild({
-      ReturnStatement(node, state) {
-        throw new Found(node, state)
-      },
-    })
-    const result = returnNodeFinder.find(ast)
+    const type = 'ReturnStatement'
+    const result = defaultTraveler.find(node => node.type === type, ast)
     assert.ok(result)
     assert.ok(result.node)
-    assert.equal(result.node.type, 'ReturnStatement')
+    assert.equal(result.node.type, type)
     assert.end()
   })
 
@@ -48,5 +46,12 @@ test('Default traveler', assert => {
     assert.end()
   })
 
+  assert.end()
+})
+
+test('Comments attachment', assert => {
+  const comments = []
+  const ast = getAst('comments.js', 8, 'script', comments)
+  attachComments(ast, comments)
   assert.end()
 })
