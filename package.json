@@ -2,18 +2,26 @@
   "name": "astravel",
   "version": "0.3.14",
   "description": "ESTree-compliant AST walker and modifier.",
-  "main": "./dist/astravel.min.js",
+  "main": "./dist/astravel.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha test/index.js",
-    "prepublish": "./node_modules/browserify/bin/cmd.js --transform [ babelify ] --plugin [ minifyify --no-map ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.min.js",
-    "build": "./node_modules/browserify/bin/cmd.js --transform [ babelify ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.js",
-    "start": "./node_modules/watchify/bin/cmd.js --transform [ babelify ] --no-builtins --debug --verbose --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.debug.js"
+    "test:build": "cross-env BABEL_ENV=test babel test/index.js --out-file test/_index.js",
+    "test": "npm run prettier && npm run test:build && tap test/_index.js --coverage",
+    "codecov": "tap --coverage-report=lcov && codecov",
+    "coverage": "tap --coverage-report=html",
+    "prepublish": "npm run build && npm run build:minified",
+    "build": "cross-env BABEL_ENV=production babel src --out-dir dist --source-maps=true",
+    "build:minified": "cross-env BABEL_ENV=minified browserify --debug --transform [ babelify --no-sourceMaps ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.min.js",
+    "start": "cross-env BABEL_ENV=development babel src --watch --out-dir dist --source-maps=true",
+    "prettier": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --list-different \"src/**/*.js\" \"test/index.js\"",
+    "prettify": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --write \"src/**/*.js\" \"test/index.js\""
   },
   "keywords": [
     "ast",
     "ast walker",
+    "ast traveler",
     "ast modifier",
-    "estree"
+    "estree",
+    "astring"
   ],
   "repository": {
     "type": "git",
@@ -22,13 +30,18 @@
   "author": "David Bonnet <david@bonnet.cc>",
   "license": "MIT",
   "devDependencies": {
-    "acorn": "^2.1.0",
-    "astring": "^0.4.5",
-    "babelify": "^6.1.3",
-    "browserify": "^11.0.1",
-    "eslint": "^1.10.1",
-    "minifyify": "^7.0.3",
-    "mocha": "^2.2.5",
-    "watchify": "^3.3.1"
+    "acorn": "^5.0.2",
+    "astring": "^1.0.5",
+    "babelify": "^7.3.0",
+    "babel-cli": "^6.24.0",
+    "babel-preset-babili": "^0.1.4",
+    "babel-preset-env": "^1.5.2",
+    "browserify": "^14.4.0",
+    "codecov": "^2.3.0",
+    "cross-env": "^5.0.1",
+    "eslint": "^4.1.0",
+    "eslint-plugin-import": "^2.6.0",
+    "prettier": "^1.5.0",
+    "tap": "^10.7.0"
   }
 }

@@ -8,26 +8,21 @@
 // Please use the GitHub bug tracker to report issues:
 // https://github.com/davidbonnet/astravel/issues
 
-
 import defaultTraveler from './defaultTraveler'
 import attachComments from './attachComments'
 
-
-function makeTraveler( properties ) {
-	/*
-	Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
-	*/
-	return defaultTraveler.makeChild( properties )
+function makeTraveler(properties) {
+  /*
+  Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
+  */
+  return defaultTraveler.makeChild(properties)
 }
-
 
 class Found {
-	constructor( node, state ) {
-		this.node = node
-		this.state = state
-	}
+  constructor(node, state) {
+    this.node = node
+    this.state = state
+  }
 }
 
-
 export { defaultTraveler, attachComments, makeTraveler, Found }
-

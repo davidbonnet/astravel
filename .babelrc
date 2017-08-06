@@ -1,0 +1,62 @@
+{
+  "env": {
+    "production": {
+      "presets": [
+        [
+          "env",
+          {
+            "loose": true,
+            "modules": "umd"
+          }
+        ]
+      ]
+    },
+    "development": {
+      "presets": [
+        [
+          "env",
+          {
+            "loose": true,
+            "modules": "umd"
+          }
+        ]
+      ]
+    },
+    "test": {
+      "presets": [
+        [
+          "env",
+          {
+            "loose": true,
+            "modules": false,
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    },
+    "minified": {
+      "presets": [
+        [
+          "env",
+          {
+            "loose": true,
+            "modules": "umd"
+          }
+        ],
+        [
+          "babili",
+          {
+            "mangle": {
+              "blacklist": {
+                "generate": true,
+                "baseGenerator": true
+              }
+            }
+          }
+        ]
+      ]
+    }
+  }
+}
