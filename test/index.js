@@ -4,7 +4,7 @@ const normalizeNewline = require('normalize-newline')
 const { test } = require('tap')
 const { parse } = require('acorn')
 
-const { defaultTraveler, Found, attachComments } = require('../dist/astravel')
+const { defaultTraveler, attachComments } = require('../dist/astravel')
 
 const DIRNAME = path.join(__dirname, 'samples')
 

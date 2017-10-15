@@ -9,10 +9,13 @@ function attachComments(
 ) {
   let { index, comments } = state
   let comment = comments[index]
+  // Define them in the blocks where there are used once
+  // https://github.com/babel/minify/issues/485 is resolved
+  let boundComments, trailingComments
   if (comment != null) {
     if (children == null || children.length === 0) {
       // No children, attach comments to parent
-      let boundComments = parent.comments != null ? parent.comments : []
+      boundComments = parent.comments != null ? parent.comments : []
       while (comment != null && comment.end < parent.end) {
         boundComments.push(comment)
         comment = comments[++index]
@@ -23,8 +26,8 @@ function attachComments(
     } else {
       // Look for heading block comments
       if (findHeadingComments) {
-        let boundComments = parent.comments != null ? parent.comments : []
-        let { start } = children[0]
+        boundComments = parent.comments != null ? parent.comments : []
+        const { start } = children[0]
         while (
           comment != null &&
           comment.type[0] === 'B' &&
@@ -42,8 +45,8 @@ function attachComments(
         comment != null && i < length;
         i++
       ) {
-        let child = children[i]
-        let boundComments = []
+        const child = children[i]
+        boundComments = []
         while (comment != null && comment.end < child.start) {
           boundComments.push(comment)
           comment = comments[++index]
@@ -63,7 +66,7 @@ function attachComments(
         comment = comments[index]
       }
       // Look for remaining comments
-      let trailingComments = []
+      trailingComments = []
       while (comment != null && comment.end < parent.end) {
         trailingComments.push(comment)
         comment = comments[++index]
@@ -99,8 +102,8 @@ let customTraveler = defaultTraveler.makeChild({
 
 export default function(node, comments) {
   /*
-	Modifies in-place the AST starting at `node` by attaching the provided `comments` and returns that AST.
-	*/
+  Modifies in-place the AST starting at `node` by attaching the provided `comments` and returns that AST.
+  */
   customTraveler[node.type](node, {
     comments,
     index: 0,
