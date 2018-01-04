@@ -36,7 +36,7 @@
     "babel-preset-env": "^1.5.2",
     "babel-preset-minify": "^0.2.0",
     "babelify": "^8.0.0",
-    "browserify": "^14.4.0",
+    "browserify": "^15.0.0",
     "codecov": "^3.0.0",
     "cross-env": "^5.0.1",
     "eslint": "^4.1.0",
