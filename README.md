@@ -6,7 +6,7 @@
 [![devDependency Status](https://david-dm.org/davidbonnet/astravel/dev-status.svg)](https://david-dm.org/davidbonnet/astravel#info=devDependencies)
 [![Greenkeeper](https://badges.greenkeeper.io/davidbonnet/astravel.svg)](https://greenkeeper.io/)
 
-A tiny and fast [ESTree](https://github.com/estree/estree)-compliant AST walker and modifier.
+👟 A tiny and fast [ESTree](https://github.com/estree/estree)-compliant AST walker and modifier.
 
 ### Key features
 
