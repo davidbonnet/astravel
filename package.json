@@ -43,6 +43,6 @@
     "eslint-plugin-import": "^2.6.0",
     "normalize-newline": "^3.0.0",
     "prettier": "^1.7.2",
-    "tap": "^11.0.0"
+    "tap": "^12.0.0"
   }
 }
