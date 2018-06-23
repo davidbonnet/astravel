@@ -1,6 +1,6 @@
 import defaultTraveler from './defaultTraveler'
 
-function attachComments(
+function attachCommentsToNode(
   parent,
   children,
   findHeadingComments,
@@ -82,25 +82,25 @@ let Program
 
 let customTraveler = defaultTraveler.makeChild({
   Program: (Program = function(node, state) {
-    attachComments(node, node.body, true, state, this)
+    attachCommentsToNode(node, node.body, true, state, this)
   }),
   BlockStatement: Program,
   ObjectExpression(node, state) {
-    attachComments(node, node.properties, true, state, this)
+    attachCommentsToNode(node, node.properties, true, state, this)
   },
   ArrayExpression(node, state) {
-    attachComments(node, node.elements, true, state, this)
+    attachCommentsToNode(node, node.elements, true, state, this)
   },
   SwitchStatement(node, state) {
-    attachComments(node, node.cases, false, state, this)
+    attachCommentsToNode(node, node.cases, false, state, this)
   },
   SwitchCase(node, state) {
-    attachComments(node, node.consequent, false, state, this)
+    attachCommentsToNode(node, node.consequent, false, state, this)
   },
   // TODO: Consider ArrayExpression ?
 })
 
-export default function(node, comments) {
+export default function attachComments(node, comments) {
   /*
   Modifies in-place the AST starting at `node` by attaching the provided `comments` and returns that AST.
   */
