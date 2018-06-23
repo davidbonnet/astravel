@@ -23,7 +23,7 @@ function getAst(filename, ecmaVersion, sourceType = 'module', onComment) {
 }
 
 test('Default traveler', assert => {
-  const ast = getAst('everything.js', 8)
+  const ast = getAst('everything.js', 10)
   defaultTraveler.go(ast)
 
   assert.test('Deprecated', assert => {

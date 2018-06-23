@@ -4,23 +4,16 @@
   "description": "ESTree-compliant AST walker and modifier.",
   "main": "./dist/astravel.js",
   "scripts": {
-    "test:build":
-      "cross-env BABEL_ENV=test babel test/index.js --out-file test/_index.js",
-    "test":
-      "npm run prettier && npm run test:build && tap test/_index.js --coverage",
+    "test:build": "cross-env BABEL_ENV=test babel test/index.js --out-file test/_index.js",
+    "test": "npm run prettier && npm run test:build && tap test/_index.js --coverage",
     "codecov": "tap --coverage-report=lcov && codecov",
     "coverage": "tap --coverage-report=html",
     "prepublish": "npm run build && npm run build:minified",
-    "build":
-      "cross-env BABEL_ENV=production babel src --out-dir dist --source-maps=true",
-    "build:minified":
-      "cross-env BABEL_ENV=minified browserify --debug --transform [ babelify --no-sourceMaps ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.min.js",
-    "start":
-      "cross-env BABEL_ENV=development babel src --watch --out-dir dist --source-maps=true",
-    "prettier":
-      "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --list-different \"src/**/*.js\" \"test/index.js\"",
-    "prettify":
-      "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --write \"src/**/*.js\" \"test/index.js\""
+    "build": "cross-env BABEL_ENV=production babel src --out-dir dist --source-maps=true",
+    "build:minified": "cross-env BABEL_ENV=minified browserify --debug --transform [ babelify --no-sourceMaps ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.min.js",
+    "start": "cross-env BABEL_ENV=development babel src --watch --out-dir dist --source-maps=true",
+    "prettier": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --list-different \"src/**/*.js\" \"test/index.js\"",
+    "prettify": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --write \"src/**/*.js\" \"test/index.js\""
   },
   "keywords": [
     "ast",
@@ -37,7 +30,7 @@
   "author": "David Bonnet <david@bonnet.cc>",
   "license": "MIT",
   "devDependencies": {
-    "acorn": "^5.0.2",
+    "acorn": "^5.7.1",
     "astring": "^1.0.5",
     "babel-cli": "^6.24.0",
     "babel-preset-env": "^1.5.2",
@@ -45,11 +38,11 @@
     "babelify": "^8.0.0",
     "browserify": "^16.2.2",
     "codecov": "^3.0.0",
-    "cross-env": "^5.1.3",
-    "eslint": "^4.1.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.0.0",
     "eslint-plugin-import": "^2.6.0",
     "normalize-newline": "^3.0.0",
-    "prettier": "^1.7.2",
+    "prettier": "^1.13.5",
     "tap": "^12.0.1"
   }
 }

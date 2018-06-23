@@ -138,7 +138,9 @@ export default {
     }
   },
   CatchClause(node, state) {
-    this.go(node.param, state)
+    if (node.param != null) {
+      this.go(node.param, state)
+    }
     this.go(node.body, state)
   },
   WhileStatement(node, state) {

@@ -39,6 +39,10 @@ async function asyncFunction() {
   return await answer()
 }
 
+async function asyncLoop() {
+  for await (const x of generator) {}
+}
+
 function branches() {
   if (a > 0) {
     callable(...a)
@@ -70,7 +74,7 @@ function loops() {
   for ( ; ; ) {}
   for (let name in object) {}
   for (let name of array) {}
-  while(i < 0) {}
+  while (i < 0) {}
   do {} while (i < 0)
 }
 
@@ -83,15 +87,21 @@ function exceptions() {
     callable(42)
   }
   try {} catch (error) {}
+  try {} catch {}
+}
+
+function patterns() {
+  const { a, [b]: c, ...rest } = object
+  const [ d, e ] = array
 }
 
 const instance = new Class()
 
 const data = {
   a,
-  b,
+  b: c,
   m() {},
-  instance,
+  ...d,
 }
 
 const object = {
@@ -134,7 +144,7 @@ object.a--
 object.a = -object.a
 object.a **= 2
 
-const array = [1, 2, 3, , 4]
+const array = [1, 2, 3, , 4, ...a]
 
 const template = `Answer is ${42}`
 
