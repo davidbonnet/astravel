@@ -42,11 +42,51 @@
     "codecov": "^3.0.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.0.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.6.0",
     "husky": "^0.14.3",
     "normalize-newline": "^3.0.0",
     "prettier": "^1.13.5",
     "standard-version": "^4.4.0",
     "tap": "^12.0.1"
+  },
+  "eslintConfig": {
+    "plugins": [
+      "import"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:import/errors",
+      "prettier"
+    ],
+    "env": {
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 9,
+      "sourceType": "module"
+    },
+    "globals": {
+      "__dirname": true,
+      "__filename": true,
+      "clearInterval": true,
+      "clearTimeout": true,
+      "console": true,
+      "document": true,
+      "global": true,
+      "module": true,
+      "process": true,
+      "require": true,
+      "window": true
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true
   }
 }
