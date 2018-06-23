@@ -13,7 +13,9 @@
     "build:minified": "cross-env BABEL_ENV=minified browserify --debug --transform [ babelify --no-sourceMaps ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.min.js",
     "start": "cross-env BABEL_ENV=development babel src --watch --out-dir dist --source-maps=true",
     "prettier": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --list-different \"src/**/*.js\" \"test/index.js\"",
-    "prettify": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --write \"src/**/*.js\" \"test/index.js\""
+    "prettify": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --write \"src/**/*.js\" \"test/index.js\"",
+    "prepush": "npm test",
+    "release": "standard-version"
   },
   "keywords": [
     "ast",
@@ -41,8 +43,10 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.0.0",
     "eslint-plugin-import": "^2.6.0",
+    "husky": "^0.14.3",
     "normalize-newline": "^3.0.0",
     "prettier": "^1.13.5",
+    "standard-version": "^4.4.0",
     "tap": "^12.0.1"
   }
 }
