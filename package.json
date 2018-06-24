@@ -10,7 +10,7 @@
     "coverage": "tap --coverage-report=html",
     "prepublish": "npm run build && npm run build:minified",
     "build": "cross-env BABEL_ENV=production babel src --out-dir dist --source-maps=true",
-    "build:minified": "cross-env BABEL_ENV=minified browserify --debug --transform [ babelify --no-sourceMaps ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.min.js",
+    "build:minified": "cross-env BABEL_ENV=minified browserify --debug --transform [ babelify --no-sourceMaps ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel | exorcist dist/astravel.min.map > dist/astravel.min.js",
     "start": "cross-env BABEL_ENV=development babel src --watch --out-dir dist --source-maps=true",
     "prettier": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --list-different \"src/**/*.js\" \"test/index.js\"",
     "prettify": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --write \"src/**/*.js\" \"test/index.js\"",
@@ -33,9 +33,9 @@
   "license": "MIT",
   "devDependencies": {
     "acorn": "^5.7.1",
-    "astring": "^1.0.5",
+    "astring": "^1.3.1",
     "ava": "^0.25.0",
-    "babel-cli": "^6.24.0",
+    "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-minify": "^0.4.3",
     "babelify": "^8.0.0",
@@ -46,12 +46,14 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.6.0",
     "esm": "^3.0.52",
+    "exorcist": "^1.0.1",
     "husky": "^0.14.3",
     "normalize-newline": "^3.0.0",
     "nyc": "^12.0.2",
     "prettier": "^1.13.5",
     "standard-version": "^4.4.0"
   },
+  "esm": "auto",
   "ava": {
     "files": [
       "src/**/tests/*.js"
