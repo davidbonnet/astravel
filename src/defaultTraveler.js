@@ -2,7 +2,8 @@ let ForInStatement,
   FunctionDeclaration,
   RestElement,
   BinaryExpression,
-  ArrayExpression
+  ArrayExpression,
+  Block
 
 const ignore = Function.prototype
 
@@ -58,21 +59,16 @@ export default {
   },
 
   // JavaScript 5
-  Program(node, state) {
-    const statements = node.body,
-      { length } = statements
-    for (let i = 0; i < length; i++) {
-      this.go(statements[i], state)
-    }
-  },
-  BlockStatement(node, state) {
-    const statements = node.body
-    if (statements != null) {
-      for (let i = 0, { length } = statements; i < length; i++) {
-        this.go(statements[i], state)
+  Program: (Block = function(node, state) {
+    const { body } = node
+    if (body != null) {
+      const { length } = body
+      for (let i = 0; i < length; i++) {
+        this.go(body[i], state)
       }
     }
-  },
+  }),
+  BlockStatement: Block,
   EmptyStatement: ignore,
   ExpressionStatement(node, state) {
     this.go(node.expression, state)
@@ -284,13 +280,7 @@ export default {
     }
     this.go(node.body, state)
   },
-  ClassBody(node, state) {
-    const { body } = node,
-      { length } = body
-    for (let i = 0; i < length; i++) {
-      this.go(body[i], state)
-    }
-  },
+  ClassBody: Block,
   ImportDeclaration(node, state) {
     const { specifiers } = node,
       { length } = specifiers
