@@ -4,8 +4,8 @@
   "description": "ESTree-compliant AST walker and modifier.",
   "main": "./dist/astravel.js",
   "scripts": {
-    "test:build": "cross-env BABEL_ENV=test babel test/index.js --out-file test/_index.js",
-    "test": "npm run prettier && npm run test:build && tap test/_index.js --coverage",
+    "test:watch": "node --require esm node_modules/.bin/ava --no-power-assert --watch",
+    "test": "eslint src/ && prettier \"src/**/*.js\" --list-different && nyc --require esm ava --no-power-assert",
     "codecov": "tap --coverage-report=lcov && codecov",
     "coverage": "tap --coverage-report=html",
     "prepublish": "npm run build && npm run build:minified",
@@ -34,6 +34,7 @@
   "devDependencies": {
     "acorn": "^5.7.1",
     "astring": "^1.0.5",
+    "ava": "^0.25.0",
     "babel-cli": "^6.24.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-minify": "^0.4.3",
@@ -44,11 +45,27 @@
     "eslint": "^5.0.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.6.0",
+    "esm": "^3.0.52",
     "husky": "^0.14.3",
     "normalize-newline": "^3.0.0",
+    "nyc": "^12.0.2",
     "prettier": "^1.13.5",
-    "standard-version": "^4.4.0",
-    "tap": "^12.0.1"
+    "standard-version": "^4.4.0"
+  },
+  "ava": {
+    "files": [
+      "src/**/tests/*.js"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "src/**/tests/*.js"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text"
+    ]
   },
   "eslintConfig": {
     "plugins": [
