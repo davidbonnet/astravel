@@ -37,7 +37,7 @@
     "babel-cli": "^6.24.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-minify": "^0.4.3",
-    "babelify": "^8.0.0",
+    "babelify": "^10.0.0",
     "browserify": "^16.2.2",
     "codecov": "^3.0.0",
     "cross-env": "^5.2.0",
