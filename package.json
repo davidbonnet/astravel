@@ -43,7 +43,7 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.0.0",
     "eslint-plugin-import": "^2.6.0",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0",
     "normalize-newline": "^3.0.0",
     "prettier": "^1.13.5",
     "standard-version": "^4.4.0",
