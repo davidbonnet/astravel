@@ -10,8 +10,6 @@
 
 import { defaultTraveler } from './defaultTraveler'
 export { attachComments } from './attachComments'
-export { getDependents } from './getDependents'
-export { document } from './document'
 
 export function makeTraveler(properties) {
   /*
