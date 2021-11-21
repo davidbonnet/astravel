@@ -2,20 +2,24 @@
   "name": "astravel",
   "version": "0.5.0",
   "description": "ESTree-compliant AST walker and modifier.",
-  "main": "./dist/astravel.js",
+  "main": "./dist/es5/astravel.js",
+  "module": "dist/module/astravel.js",
+  "jsnext:main": "dist/module/astravel.js",
+  "es": "src/astravel.js",
+  "main-es": "src/astravel.js",
   "scripts": {
-    "test:build": "cross-env BABEL_ENV=test babel test/index.js --out-file test/_index.js",
-    "test": "npm run prettier && npm run test:build && tap test/_index.js --coverage",
-    "codecov": "tap --coverage-report=lcov && codecov",
-    "coverage": "tap --coverage-report=html",
-    "prepublish": "npm run build && npm run build:minified",
-    "build": "cross-env BABEL_ENV=production babel src --out-dir dist --source-maps=true",
-    "build:minified": "cross-env BABEL_ENV=minified browserify --debug --transform [ babelify --no-sourceMaps ] --no-builtins --standalone astravel --require ./src/astravel.js:astravel --outfile dist/astravel.min.js",
-    "start": "cross-env BABEL_ENV=development babel src --watch --out-dir dist --source-maps=true",
-    "prettier": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --list-different \"src/**/*.js\" \"test/index.js\"",
-    "prettify": "prettier --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma all --parser babylon --write \"src/**/*.js\" \"test/index.js\"",
+    "prepare": "babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/es5 --ignore \"**/tests/**/*.js\" src; cross-env BABEL_MODE=module babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/module --ignore \"**/tests/**/*.js\" src",
+    "dev": "ava --watch",
+    "dev:update": "ava --watch --update-snapshots",
+    "test": "npm run eslint && npm run prettier:check && npm run test:coverage",
+    "test:coverage": "c8 --reporter=html --reporter=text --reporter=lcov --include='src/*.js' --exclude='src/tests/**/*.js' ava",
+    "eslint": "eslint src/",
+    "prettier": "prettier --write \"src/*.js\" \"src/tests/*.js\" \"src/tests/helpers/*.js\"",
+    "prettier:check": "prettier --list-different \"src/*.js\" \"src/tests/*.js\" \"src/tests/helpers/*.js\"",
     "prepush": "npm test",
-    "release": "standard-version"
+    "release": "standard-version",
+    "deploy": "git push --follow-tags origin master && npm publish",
+    "release:deploy": "npm run release && npm run deploy"
   },
   "keywords": [
     "ast",
@@ -31,22 +35,47 @@
   },
   "author": "David Bonnet <david@bonnet.cc>",
   "license": "MIT",
+  "dependencies": {
+    "meriyah": "^2.1.1"
+  },
   "devDependencies": {
-    "acorn": "^5.7.1",
-    "astring": "^1.0.5",
-    "babel-cli": "^6.24.0",
-    "babel-preset-env": "^1.5.2",
-    "babel-preset-minify": "^0.4.3",
-    "babelify": "^8.0.0",
-    "browserify": "^16.2.2",
-    "codecov": "^3.0.0",
-    "cross-env": "^5.2.0",
-    "eslint": "^5.0.0",
-    "eslint-plugin-import": "^2.6.0",
-    "husky": "^0.14.3",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/runtime": "^7.11.2",
+    "astring": "^1.4.3",
+    "ava": "^3.12.1",
+    "c8": "^7.3.0",
+    "codecov": "^3.7.2",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "esm": "^3.2.25",
+    "exorcist": "^1.0.1",
+    "husky": "^4.3.0",
     "normalize-newline": "^3.0.0",
-    "prettier": "^1.13.5",
-    "standard-version": "^4.4.0",
-    "tap": "^12.0.1"
-  }
+    "prettier": "^2.1.2",
+    "standard-version": "^4.4.0"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "useTabs": false
+  },
+  "ava": {
+    "files": [
+      "src/**/tests/*.js"
+    ],
+    "require": [
+      "esm"
+    ]
+  },
+  "esm": "auto"
 }

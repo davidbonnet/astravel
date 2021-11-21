@@ -23,5 +23,15 @@
         "--config-precedence": "prefer-file"
       }
     }
+  },
+  "SublimeLinter": {
+    "linters": {
+      "eslint": {
+        "disable": false
+      },
+      "flow": {
+        "disable": true
+      }
+    }
   }
 }

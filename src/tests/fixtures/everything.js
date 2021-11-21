@@ -10,7 +10,7 @@ export * from 'e'
 export default class Class {
   constructor() {
     this.bound = () => {}
-    this.otherBound = (a) => ({})
+    this.otherBound = a => ({})
   }
   static s() {}
   m() {
@@ -25,12 +25,12 @@ function callable(a, b, c = 42) {
   let d = a
   var e = b
   const f = c
-  const {g, h, i} = e
+  const { g, h, i } = e
   const [j, k, l] = array
   return c === 42 ? a : b
 }
 
-function *generator() {
+function* generator() {
   yield
   yield 42
 }
@@ -40,7 +40,8 @@ async function asyncFunction() {
 }
 
 async function asyncLoop() {
-  for await (const x of generator) {}
+  for await (const x of generator) {
+  }
 }
 
 function branches() {
@@ -51,9 +52,9 @@ function branches() {
   } else {
     callable(2)
   }
-  if (a == 0) {}
-  label:
-  switch (a) {
+  if (a == 0) {
+  }
+  label: switch (a) {
     case 1:
       break label
     default:
@@ -63,17 +64,18 @@ function branches() {
 }
 
 function loops() {
-  otherLabel:
-  for (let i = 0; i < a.length; i++) {
+  otherLabel: for (let i = 0; i < a.length; i++) {
     if (i < 10) {
       continue otherLabel
     } else {
       continue
     }
   }
-  for ( ; ; ) {}
-  for (let name in object) {}
-  for (let name of array) {}
+  for (;;) {}
+  for (let name in object) {
+  }
+  for (let name of array) {
+  }
   while (i < 0) {}
   do {} while (i < 0)
 }
@@ -86,13 +88,15 @@ function exceptions() {
   } finally {
     callable(42)
   }
-  try {} catch (error) {}
-  try {} catch {}
+  try {
+  } catch (error) {}
+  try {
+  } catch {}
 }
 
 function patterns() {
   const { a, [b]: c, ...rest } = object
-  const [ d, e ] = array
+  const [d, e] = array
 }
 
 const instance = new Class()

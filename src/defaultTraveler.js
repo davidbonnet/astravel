@@ -2,7 +2,9 @@ let ForInStatement,
   FunctionDeclaration,
   RestElement,
   BinaryExpression,
-  ArrayExpression
+  ArrayExpression,
+  Block,
+  MethodDefinition
 
 const ignore = Function.prototype
 
@@ -13,14 +15,15 @@ class Found {
   }
 }
 
-export default {
-  // Basic methods
+export const defaultTraveler = {
   go(node, state) {
     /*
     Starts travelling through the specified AST `node` with the provided `state`.
     This method is recursively called by each node handler.
     */
-    this[node.type](node, state)
+    if (this[node.type]) {
+      this[node.type](node, state)
+    }
   },
   find(predicate, node, state) {
     /*
@@ -29,7 +32,7 @@ export default {
     Otherwise, returns `undefined`.
     */
     const finder = Object.create(this)
-    finder.go = function(node, state) {
+    finder.go = function (node, state) {
       if (predicate(node, state)) {
         throw new Found(node, state)
       }
@@ -56,23 +59,17 @@ export default {
     }
     return traveler
   },
-
-  // JavaScript 5
-  Program(node, state) {
-    const statements = node.body,
-      { length } = statements
-    for (let i = 0; i < length; i++) {
-      this.go(statements[i], state)
-    }
-  },
-  BlockStatement(node, state) {
-    const statements = node.body
-    if (statements != null) {
-      for (let i = 0, { length } = statements; i < length; i++) {
-        this.go(statements[i], state)
+  Program: (Block = function (node, state) {
+    const { body } = node
+    if (body != null) {
+      const { length } = body
+      for (let i = 0; i < length; i++) {
+        this.go(body[i], state)
       }
     }
-  },
+  }),
+  BlockStatement: Block,
+  StaticBlock: Block,
   EmptyStatement: ignore,
   ExpressionStatement(node, state) {
     this.go(node.expression, state)
@@ -163,13 +160,13 @@ export default {
     }
     this.go(node.body, state)
   },
-  ForInStatement: (ForInStatement = function(node, state) {
+  ForInStatement: (ForInStatement = function (node, state) {
     this.go(node.left, state)
     this.go(node.right, state)
     this.go(node.body, state)
   }),
   DebuggerStatement: ignore,
-  FunctionDeclaration: (FunctionDeclaration = function(node, state) {
+  FunctionDeclaration: (FunctionDeclaration = function (node, state) {
     if (node.id != null) {
       this.go(node.id, state)
     }
@@ -204,7 +201,7 @@ export default {
     this.go(node.body, state)
   },
   ThisExpression: ignore,
-  ArrayExpression: (ArrayExpression = function(node, state) {
+  ArrayExpression: (ArrayExpression = function (node, state) {
     const { elements } = node,
       { length } = elements
     for (let i = 0; i < length; i++) {
@@ -223,7 +220,7 @@ export default {
   },
   Property(node, state) {
     this.go(node.key, state)
-    if (!node.shorthand) {
+    if (node.value != null) {
       this.go(node.value, state)
     }
   },
@@ -245,7 +242,7 @@ export default {
     this.go(node.left, state)
     this.go(node.right, state)
   },
-  BinaryExpression: (BinaryExpression = function(node, state) {
+  BinaryExpression: (BinaryExpression = function (node, state) {
     this.go(node.left, state)
     this.go(node.right, state)
   }),
@@ -271,9 +268,8 @@ export default {
     this.go(node.property, state)
   },
   Identifier: ignore,
+  PrivateIdentifier: ignore,
   Literal: ignore,
-
-  // JavaScript 6
   ForOfStatement: ForInStatement,
   ClassDeclaration(node, state) {
     if (node.id) {
@@ -284,13 +280,7 @@ export default {
     }
     this.go(node.body, state)
   },
-  ClassBody(node, state) {
-    const { body } = node,
-      { length } = body
-    for (let i = 0; i < length; i++) {
-      this.go(body[i], state)
-    }
-  },
+  ClassBody: Block,
   ImportDeclaration(node, state) {
     const { specifiers } = node,
       { length } = specifiers
@@ -332,15 +322,16 @@ export default {
   ExportAllDeclaration(node, state) {
     this.go(node.source, state)
   },
-  MethodDefinition(node, state) {
+  MethodDefinition: (MethodDefinition = function (node, state) {
     this.go(node.key, state)
     this.go(node.value, state)
-  },
+  }),
+  PropertyDefinition: MethodDefinition,
   ClassExpression(node, state) {
     this.ClassDeclaration(node, state)
   },
   Super: ignore,
-  RestElement: (RestElement = function(node, state) {
+  RestElement: (RestElement = function (node, state) {
     this.go(node.argument, state)
   }),
   SpreadElement: RestElement,
@@ -379,8 +370,6 @@ export default {
     this.go(node.meta, state)
     this.go(node.property, state)
   },
-
-  // JavaScript 7
   AwaitExpression(node, state) {
     this.go(node.argument, state)
   },

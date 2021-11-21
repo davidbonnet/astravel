@@ -1,0 +1,24 @@
+{
+  "plugins": ["import"],
+  "extends": ["eslint:recommended", "plugin:import/errors", "prettier"],
+  "env": {
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module"
+  },
+  "globals": {
+    "__dirname": true,
+    "__filename": true,
+    "clearInterval": true,
+    "clearTimeout": true,
+    "console": true,
+    "document": true,
+    "global": true,
+    "module": true,
+    "process": true,
+    "require": true,
+    "window": true
+  }
+}
