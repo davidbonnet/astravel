@@ -1,6 +1,6 @@
 import { join } from 'path'
 
-import { parse } from '../../parse'
+import { parse } from './parse'
 
 const DIRNAME = join(__dirname, '../fixtures')
 

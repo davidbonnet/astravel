@@ -3,12 +3,14 @@
   "version": "0.5.0",
   "description": "ESTree-compliant AST walker and modifier.",
   "main": "./dist/es5/astravel.js",
-  "module": "dist/module/astravel.js",
-  "jsnext:main": "dist/module/astravel.js",
-  "es": "src/astravel.js",
-  "main-es": "src/astravel.js",
+  "module": "./dist/module/astravel.mjs",
+  "exports": {
+    "import": "./dist/astravel.mjs",
+    "require": "./dist/astring.js",
+    "browser": "./dist/astring.min.js"
+  },
   "scripts": {
-    "prepare": "babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/es5 --ignore \"**/tests/**/*.js\" src; cross-env BABEL_MODE=module babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/module --ignore \"**/tests/**/*.js\" src",
+    "prepare": "rm -rf dist/*; mkdir dist/import; cp src/*.js dist/import/; ls -1 dist/import/*.js | xargs -L 1 -I {} bash -c 'mv $1 \"${1%.*}.mjs\"' _ {};  babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/es5 --ignore \"**/tests/**/*.js\" src; cross-env BABEL_MODE=module babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/module --ignore \"**/tests/**/*.js\" src",
     "dev": "ava --watch",
     "dev:update": "ava --watch --update-snapshots",
     "test": "npm run eslint && npm run prettier:check && npm run test:coverage",
@@ -35,9 +37,6 @@
   },
   "author": "David Bonnet <david@bonnet.cc>",
   "license": "MIT",
-  "dependencies": {
-    "meriyah": "^2.1.1"
-  },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
@@ -55,6 +54,7 @@
     "esm": "^3.2.25",
     "exorcist": "^1.0.1",
     "husky": "^4.3.0",
+    "meriyah": "^2.1.1",
     "normalize-newline": "^3.0.0",
     "prettier": "^2.1.2",
     "standard-version": "^4.4.0"

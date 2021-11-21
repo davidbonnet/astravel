@@ -10,8 +10,9 @@
 
 ### Key features
 
-- Works on [ESTree](https://github.com/estree/estree)-compliant ASTs such as the ones produced by [Meriyah](https://github.com/meriyah/meriyah).
+- Works on [ESTree](https://github.com/estree/estree)-compliant ASTs (JavaScript [version 13 (2022)](https://tc39.github.io/ecma262/)), such as the ones produced by [Meriyah](https://github.com/meriyah/meriyah).
 - Out-of-the-box functions such as source code comments insertion for [Astring](https://github.com/davidbonnet/astring).
+- Extensible with custom nodes.
 - No dependencies and small footprint.
 
 ## Installation
