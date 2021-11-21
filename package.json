@@ -77,15 +77,5 @@
       "esm"
     ]
   },
-  "nyc": {
-    "exclude": [
-      "src/**/tests/*.js"
-    ],
-    "reporter": [
-      "html",
-      "lcov",
-      "text"
-    ]
-  },
   "esm": "auto"
 }
