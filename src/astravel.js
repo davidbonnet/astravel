@@ -8,14 +8,16 @@
 // Please use the GitHub bug tracker to report issues:
 // https://github.com/davidbonnet/astravel/issues
 
-import defaultTraveler from './defaultTraveler'
-import attachComments from './attachComments'
+import { defaultTraveler } from './defaultTraveler'
+export { attachComments } from './attachComments'
+export { getDependents } from './getDependents'
+export { document } from './document'
 
-function makeTraveler(properties) {
+export function makeTraveler(properties) {
   /*
   Returns a custom AST traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the parent traveler object.
   */
   return defaultTraveler.makeChild(properties)
 }
 
-export { defaultTraveler, attachComments, makeTraveler }
+export { defaultTraveler }

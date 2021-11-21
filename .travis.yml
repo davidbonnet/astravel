@@ -1,8 +1,7 @@
 language: node_js
 node_js:
-  - 10
-  - 8
-  - 6
-script:
-  - npm test
-  - npm run codecov
+  - 12
+  - 14
+
+after_success:
+  - npx codecov --file=./coverage/lcov.info

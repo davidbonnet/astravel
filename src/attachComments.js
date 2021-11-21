@@ -1,4 +1,4 @@
-import defaultTraveler from './defaultTraveler'
+import { defaultTraveler } from './defaultTraveler'
 
 function attachCommentsToNode(
   traveler,
@@ -10,13 +10,15 @@ function attachCommentsToNode(
   let { index } = state
   const { comments } = state
   let comment = comments[index]
+  // Hack to tackle https://github.com/babel/minify/issues/866
+  let boundComments, trailingComments
   if (comment == null) {
     return
   }
   if (children == null || children.length === 0) {
     // No children, attach comments to parent
-    const boundComments = parent.comments != null ? parent.comments : []
-    while (comment != null && comment.end < parent.end) {
+    boundComments = parent.comments != null ? parent.comments : []
+    while (comment != null && comment.end <= parent.end) {
       boundComments.push(comment)
       comment = comments[++index]
     }
@@ -28,12 +30,12 @@ function attachCommentsToNode(
   }
   // Look for heading block comments not immediately followed by a child
   if (findHeadingComments) {
-    const boundComments = parent.comments != null ? parent.comments : []
-    const start = children[0].loc.start.line - 1
+    boundComments = parent.comments != null ? parent.comments : []
+    const { start } = children[0]
     while (
       comment != null &&
-      comment.type[0] === 'B' &&
-      comment.loc.end.line < start
+      (comment.type[0] === 'B' || comment.type[0] === 'M') &&
+      comment.end <= start
     ) {
       boundComments.push(comment)
       comment = comments[++index]
@@ -44,13 +46,17 @@ function attachCommentsToNode(
   // Attach comments to children
   for (let i = 0, { length } = children; comment != null && i < length; i++) {
     const child = children[i]
-    const boundComments = []
-    while (comment != null && comment.end < child.start) {
+    boundComments = []
+    while (comment != null && comment.end <= child.start) {
       boundComments.push(comment)
       comment = comments[++index]
     }
-    // Check if next comment is line comment and on the same line
-    if (comment != null && comment.type[0] === 'L') {
+    // Check if next comment is line comment and on the same line if location is provided
+    if (
+      comment != null &&
+      comment.loc != null &&
+      (comment.type[0] === 'L' || comment.type[0] === 'S')
+    ) {
       if (comment.loc.start.line === child.loc.end.line) {
         boundComments.push(comment)
         comment = comments[++index]
@@ -66,8 +72,8 @@ function attachCommentsToNode(
     comment = comments[index]
   }
   // Look for remaining comments
-  const trailingComments = []
-  while (comment != null && comment.end < parent.end) {
+  trailingComments = []
+  while (comment != null && comment.end <= parent.end) {
     trailingComments.push(comment)
     comment = comments[++index]
   }
@@ -77,12 +83,12 @@ function attachCommentsToNode(
   state.index = index
 }
 
-let Block
+function Block(node, state) {
+  attachCommentsToNode(this, state, node, node.body, true)
+}
 
-let commentsTraveler = defaultTraveler.makeChild({
-  Program: (Block = function(node, state) {
-    attachCommentsToNode(this, state, node, node.body, true)
-  }),
+let traveler = defaultTraveler.makeChild({
+  Program: Block,
   BlockStatement: Block,
   ClassBody: Block,
   ObjectExpression(node, state) {
@@ -100,11 +106,11 @@ let commentsTraveler = defaultTraveler.makeChild({
   // TODO: Consider ArrayExpression ?
 })
 
-export default function attachComments(node, comments) {
+export function attachComments(node, comments) {
   /*
   Modifies in-place the AST starting at `node` by attaching the provided `comments` and returns that AST.
   */
-  commentsTraveler[node.type](node, {
+  traveler[node.type](node, {
     comments,
     index: 0,
   })

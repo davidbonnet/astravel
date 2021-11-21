@@ -1,14 +1,13 @@
 import test from 'ava'
 
-import { getAst } from './helpers'
-import defaultTraveler from '../defaultTraveler'
+import { parseFixture } from './helpers/parseFixture'
+import { defaultTraveler } from '../defaultTraveler'
 
-const ast = getAst('everything.js', 10)
-
-test('Default traveler', assert => {
+test('Default traveler', async (assert) => {
   const state = {
     tree: ['Root', []],
   }
+  const ast = await parseFixture('everything.js')
   const customTraveler = defaultTraveler.makeChild({
     go(node, state) {
       const { tree } = state
@@ -23,20 +22,24 @@ test('Default traveler', assert => {
   assert.snapshot(state.tree)
 })
 
-test('Deprecated', assert => {
-  const ast = getAst('deprecated.js', 5, 'script')
+test('Deprecated', async (assert) => {
+  const ast = await parseFixture('deprecated.js', {
+    module: false,
+    impliedStrict: false,
+  })
   defaultTraveler.go(ast)
   assert.pass()
 })
 
-test('Find node', assert => {
+test('Find node', async (assert) => {
+  const ast = await parseFixture('simple.js')
   const type = 'ReturnStatement'
-  const result = defaultTraveler.find(node => node.type === type, ast)
+  const result = defaultTraveler.find((node) => node.type === type, ast)
   assert.truthy(result)
   assert.truthy(result.node)
   assert.is(result.node.type, type)
 })
 
-test('Find node throws error', assert => {
-  assert.throws(() => defaultTraveler.find(), TypeError)
+test('Find node throws error', (assert) => {
+  assert.throws(() => defaultTraveler.find(), { instanceOf: TypeError })
 })

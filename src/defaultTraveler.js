@@ -15,7 +15,7 @@ class Found {
   }
 }
 
-export default {
+export const defaultTraveler = {
   go(node, state) {
     /*
     Starts travelling through the specified AST `node` with the provided `state`.

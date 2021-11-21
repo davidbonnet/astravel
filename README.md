@@ -10,11 +10,9 @@
 
 ### Key features
 
-- Works on [ESTree](https://github.com/estree/estree)-compliant ASTs such as the ones produced by [Acorn](https://github.com/marijnh/acorn).
+- Works on [ESTree](https://github.com/estree/estree)-compliant ASTs such as the ones produced by [Meriyah](https://github.com/meriyah/meriyah).
 - Out-of-the-box functions such as source code comments insertion for [Astring](https://github.com/davidbonnet/astring).
 - No dependencies and small footprint.
-
-
 
 ## Installation
 
@@ -32,20 +30,23 @@ cd astravel
 npm install
 ```
 
-A browser-ready minified version of Astravel is available at `dist/astravel.min.js`.
-
-
-
 ## Usage
 
 The `astravel` module exports the following items:
 
-- [defaultTraveler](#astraveldefaulttraveler)
-- [makeTraveler(properties) ➞ traveler](#astravelmaketravelerproperties--traveler)
-- [attachComments(ast, comments) ➞ ast](#astravelattachcommentsast-comments--ast)
+<!-- MarkdownTOC autolink="true" levels="4" -->
 
+- [`defaultTraveler`](#defaulttraveler)
+- [`makeTraveler()`](#maketraveler)
+- [`attachComments()`](#attachcomments)
 
-#### astravel.defaultTraveler
+<!-- /MarkdownTOC -->
+
+#### `defaultTraveler`
+
+> ⬅️ `traveler`
+
+> ⚠️ Deprecated in favor of ES6 class notation.
 
 This object describes a basic AST traveler. It contains the following methods:
 
@@ -54,16 +55,20 @@ This object describes a basic AST traveler. It contains the following methods:
 - `[NodeType](node, state)`: Method handler for a specific `NodeType`.
 - `makeChild(properties) ➞ traveler`: Returns a custom AST traveler that inherits from `this` traveler with its own provided `properties` and the property `super` that points to `this` traveler.
 
+#### `makeTraveler()`
 
-#### astravel.makeTraveler(properties) ➞ traveler
+> ➡️ `(properties)`
+> ⬅️ `traveler`
+
+> ⚠️ Deprecated in favor of ES6 class notation.
 
 This function is similar to `astravel.defaultTraveler.makeChild`: it returns a traveler that inherits from the `defaultTraveler` with its own provided `properties` and the property `super` that points to the `defaultTraveler` object. These properties should redefine the traveler's behavior by implementing the `go(node, state)` method and/or any node handler.
 
 When redefining the `go` method, make sure its basic functionality is kept by calling the parent's `go` method to keep traveling through the AST:
 
 ```javascript
-var customTraveler = astravel.makeTraveler({
-  go: function(node, state) {
+const customTraveler = makeTraveler({
+  go: function (node, state) {
     // Code before entering the node
     console.log('Entering ' + node.type)
     // Call the parent's `go` method
@@ -77,16 +82,20 @@ var customTraveler = astravel.makeTraveler({
 To skip specific node types, the most effective way is to replace the corresponding node handlers with a function that does nothing:
 
 ```javascript
-var ignore = Function.prototype
-var customTraveler = astravel.makeTraveler({
+import { makeTraveler } from 'astravel'
+
+const ignore = Function.prototype
+const customTraveler = makeTraveler({
   FunctionDeclaration: ignore,
   FunctionExpression: ignore,
   ArrowFunctionExpression: ignore,
 })
 ```
 
+#### `attachComments()`
 
-#### astravel.attachComments(ast, comments) ➞ ast
+> ➡️ `(ast, comments)`
+> ⬅️ `ast`
 
 This function attaches a list of `comments` to the corresponding nodes of a provided `ast` and returns that same `ast`. The `ast` is modified in-place and only the nodes getting comments are augmented with a `comments` and/or a `trailingComments` array property.
 
@@ -98,18 +107,36 @@ Each comment should be an object with the following properties:
 - `end`: Comment ending character offset number
 - `loc`: Location object with `start` and `end` properties containing one-based `line` number and zero-based `column` number properties.
 
-This example shows how to obtain a proper list of `comments` of a given source `code` with [Acorn](https://github.com/marijnh/acorn) and how to attach them on the generated `ast`:
+The following examples show how to obtain a proper list of `comments` of a given source `code` and how to attach them on the generated `ast`:
+
+##### Usage with [Meriyah](https://github.com/meriyah/meriyah)
 
 ```javascript
-var comments = [];
-var ast = acorn.parse(code, {
-   // This ensures that the `loc` property is present on comment objects
-   locations: true,
-   // Acorn will store the comment objects in this array
-   onComment: comments
-});
-// Attach comments on the ast
-astravel.attachComments(ast, comments);
+import { parse } from 'meriyah'
+import { attachComments } from 'astravel'
+
+const comments = []
+const ast = parse(code, {
+  // Comments are stored in this array
+  onComment: comments,
+})
+// Attach comments on the AST
+attachComments(ast, comments)
+```
+
+##### Usage with [Acorn](https://github.com/acornjs/acorn)
+
+```javascript
+import { parse } from 'acorn'
+import { attachComments } from 'astravel'
+
+const comments = []
+const ast = parse(code, {
+  // This ensures that the `loc` property is present on comment objects
+  locations: true,
+  onComment: comments,
+})
+attachComments(ast, comments)
 ```
 
 The algorithm assumes that comments are not put in exotic places, such as in-between function arguments, and proceeds as follows:
@@ -122,7 +149,7 @@ In this example, the comments tell to which statement they are attached:
 
 ```javascript
 // Attached to the variable declaration just below
-var point = {
+const point = {
   // Attached to the property definition just below
   x: 0,
   y: 0, // Attached to the property definition on its left
@@ -139,50 +166,3 @@ function add(a, b) {
 }
 // Trailing comment attached as such to the program body
 ```
-
-
-
-## Building
-
-All building scripts are defined in the `package.json` file and rely on the [Node Package Manager](https://www.npmjs.com/). All commands must be run from within the root repository folder.
-
-
-### Production
-
-Production code can be obtained from the `dist` folder by running:
-
-```bash
-npm run build
-```
-
-If you are already using a JavaScript 6 to 5 compiler for your project, or a JavaScript 6 compliant interpreter, you can include the `src/astravel.js` file directly.
-
-A minified version of Astravel with source maps can be obtained at `dist/astravel.min.js` by running:
-
-```bash
-npm run build:minified
-```
-
-
-### Development
-
-If you are working on Astring, you can enable Babel's watch mode to automatically transpile to the `dist` folder at each update by running:
-
-```bash
-npm start
-```
-
-
-#### Tests
-
-While making changes to Astravel, make sure it passes the tests (it checks code formatting and unit tests):
-
-```bash
-npm test
-```
-
-
-
-## Roadmap
-
-Planned features and releases are outlined on the [milestones page](https://github.com/davidbonnet/astravel/milestones).
