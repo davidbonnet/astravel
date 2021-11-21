@@ -2,15 +2,14 @@
   "name": "astravel",
   "version": "0.6.0",
   "description": "ESTree-compliant AST walker and modifier.",
-  "main": "./dist/es5/astravel.js",
-  "module": "./dist/module/astravel.mjs",
+  "main": "./dist/require/astravel.js",
+  "module": "./dist/module/astravel.js",
   "exports": {
-    "import": "./dist/astravel.mjs",
-    "require": "./dist/astring.js",
-    "browser": "./dist/astring.min.js"
+    "import": "./dist/module/astravel.js",
+    "require": "./dist/require/astravel.js"
   },
   "scripts": {
-    "prepare": "rm -rf dist/*; mkdir dist/import; cp src/*.js dist/import/; ls -1 dist/import/*.js | xargs -L 1 -I {} bash -c 'mv $1 \"${1%.*}.mjs\"' _ {};  babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/es5 --ignore \"**/tests/**/*.js\" src; cross-env BABEL_MODE=module babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/module --ignore \"**/tests/**/*.js\" src",
+    "prepare": "rm -rf dist/*; babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/require --ignore \"**/tests/**/*.js\" src; cross-env BABEL_MODE=module babel --config-file ./babel.config.js --no-comments --source-maps --out-dir dist/module --ignore \"**/tests/**/*.js\" src",
     "dev": "ava --watch",
     "dev:update": "ava --watch --update-snapshots",
     "test": "npm run eslint && npm run prettier:check && npm run test:coverage",
@@ -45,6 +44,7 @@
     "@babel/runtime": "^7.11.2",
     "astring": "^1.4.3",
     "ava": "^3.12.1",
+    "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
     "c8": "^7.3.0",
     "codecov": "^3.7.2",
     "cross-env": "^7.0.2",

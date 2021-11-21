@@ -5,22 +5,9 @@ module.exports = (api) => {
       return {
         plugins: [
           [
-            '@babel/plugin-transform-runtime',
+            'module-extension-resolver',
             {
-              absoluteRuntime: false,
-              corejs: false,
-              helpers: true,
-              regenerator: true,
-              useESModules: true,
-            },
-          ],
-        ],
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              modules: false,
-              forceAllTransforms: true,
+              extensionsToKeep: ['.js', '.json'],
             },
           ],
         ],
