@@ -1,4 +1,4 @@
-import { defaultTraveler } from './defaultTraveler'
+import { defaultTraveler } from './defaultTraveler.js'
 
 function attachCommentsToNode(
   traveler,

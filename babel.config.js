@@ -1,13 +1,12 @@
-module.exports = (api) => {
-  api.cache.never()
+export default () => {
   switch (process.env.BABEL_MODE) {
     case 'module':
       return {
-        plugins: [
+        presets: [
           [
-            'module-extension-resolver',
+            '@babel/preset-env',
             {
-              extensionsToKeep: ['.js', '.json'],
+              modules: false,
             },
           ],
         ],
@@ -16,13 +15,9 @@ module.exports = (api) => {
       return {
         plugins: [
           [
-            '@babel/plugin-transform-runtime',
+            'replace-import-extension',
             {
-              absoluteRuntime: false,
-              corejs: false,
-              helpers: true,
-              regenerator: true,
-              useESModules: false,
+              extMapping: { '.js': '.cjs' },
             },
           ],
         ],
@@ -30,6 +25,7 @@ module.exports = (api) => {
           [
             '@babel/preset-env',
             {
+              modules: 'commonjs',
               forceAllTransforms: true,
             },
           ],

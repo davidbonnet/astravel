@@ -299,6 +299,9 @@ export const defaultTraveler = {
     this.go(node.imported, state)
     this.go(node.local, state)
   },
+  ImportExpression(node, state) {
+    this.go(node.source.type, state)
+  },
   ExportDefaultDeclaration(node, state) {
     this.go(node.declaration, state)
   },

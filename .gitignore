@@ -1,5 +1,6 @@
 *.DS_Store
 *.sublime-workspace
+*.tgz
 test/_*.js
 .nyc_output
 coverage
