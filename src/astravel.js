@@ -8,8 +8,8 @@
 // Please use the GitHub bug tracker to report issues:
 // https://github.com/davidbonnet/astravel/issues
 
-import { defaultTraveler } from './defaultTraveler'
-export { attachComments } from './attachComments'
+import { defaultTraveler } from './defaultTraveler.js'
+export { attachComments } from './attachComments.js'
 
 export function makeTraveler(properties) {
   /*

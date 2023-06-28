@@ -20,6 +20,14 @@ class A {
 	*/
 
   m(x, y = true) {
+    const foo = 'foo'
+
+    Promise.all([
+      import('./a.js'),
+      import('b'),
+      import(`${foo}/bar`),
+      import('https://domain.com/pkg/umd/foo.js')
+    ])
     /*
 		Document for method `m` with params `x` and `y`.
 		*/

@@ -1,7 +1,7 @@
 import test from 'ava'
 
-import { parseFixture } from './helpers/parseFixture'
-import { attachComments } from '../attachComments'
+import { parseFixture } from './helpers/parseFixture.js'
+import { attachComments } from '../attachComments.js'
 
 test('Comments attachment', async (assert) => {
   const comments = []

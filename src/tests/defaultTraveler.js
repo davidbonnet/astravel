@@ -1,7 +1,7 @@
 import test from 'ava'
 
-import { parseFixture } from './helpers/parseFixture'
-import { defaultTraveler } from '../defaultTraveler'
+import { parseFixture } from './helpers/parseFixture.js'
+import { defaultTraveler } from '../defaultTraveler.js'
 
 test('Default traveler', async (assert) => {
   const state = {
