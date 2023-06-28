@@ -40,13 +40,9 @@
   },
   "author": "David Bonnet <david@bonnet.cc>",
   "license": "MIT",
-  "dependencies": {
-    "@babel/runtime": "^7.22.5"
-  },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
-    "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "astring": "^1.4.3",
     "ava": "^3.12.1",
