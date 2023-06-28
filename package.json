@@ -1,6 +1,6 @@
 {
   "name": "astravel",
-  "version": "0.6.2",
+  "version": "0.6.1",
   "description": "ESTree-compliant AST walker and modifier.",
   "type": "module",
   "main": "./dist/require/astravel.js",
