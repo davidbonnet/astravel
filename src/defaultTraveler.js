@@ -21,7 +21,7 @@ export const defaultTraveler = {
     Starts travelling through the specified AST `node` with the provided `state`.
     This method is recursively called by each node handler.
     */
-    if (this[node.type]) {
+    if (node && this[node.type]) {
       this[node.type](node, state)
     }
   },
